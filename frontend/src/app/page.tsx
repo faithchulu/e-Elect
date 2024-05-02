@@ -68,7 +68,7 @@ const ElectionCard = ({ election }: { election: Election }) => {
         {getStatusIcon(election.status)}
       </div>
       <p className="mt-2 text-gray-300">{getStatusText(election.status)}</p>
-      <Link href={election.status === 'registration' ? '/voter-registration/2345' : '/cast-vote/:id'} className="mt-4 block w-full text-center bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600">
+      <Link href={election.status === 'registration' ? '/voter-registration/2345' : '/cast-vote/37848dhhd8'} className="mt-4 block w-full text-center bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600">
         {getActionText(election.status)}
       </Link>
     </div>
@@ -87,14 +87,14 @@ const LandingPage = () => {
 
           <h2 className="text-xl font-semibold mb-4 text-white">Currently Active Elections</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {activeElections.map((election) => (
               <ElectionCard key={election.id} election={election} />
             ))}
           </div>
   
           <h2 className="text-xl font-semibold mt-8 mb-4 text-white">Historical Elections</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {historicalElections.map((election) => (
               <ElectionCard key={election.id} election={election} />
             ))}
