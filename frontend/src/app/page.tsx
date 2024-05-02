@@ -62,13 +62,13 @@ const ElectionCard = ({ election }: { election: Election }) => {
   };
 
   return (
-    <div className="p-4 bg-slate-900 shadow-lg rounded-lg">
+    <div className="p-4 bg-slate-950 shadow-lg rounded-lg">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-white">{election.name}</h2>
         {getStatusIcon(election.status)}
       </div>
       <p className="mt-2 text-gray-300">{getStatusText(election.status)}</p>
-      <Link href={election.status === 'registration' ? '/voter-registration/2345' : '/cast-vote/37848dhhd8'} className="mt-4 block w-full text-center bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600">
+      <Link href={election.status === 'registration' ? '/voter-registration/2345' : '/cast-vote/37848dhhd8'} className="mt-4 block w-full text-center bg-green-600 text-white py-2 rounded-md hover:bg-green-500">
         {getActionText(election.status)}
       </Link>
     </div>

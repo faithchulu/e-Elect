@@ -1,49 +1,182 @@
 "use client"
 import { useState } from 'react';
-import { FingerPrintIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon, ChevronLeftIcon, DocumentPlusIcon } from '@heroicons/react/24/outline';
+import Logo from '../../../../public/images/logo/e-Elect-Logo.png'
+import Image from 'next/image';
 
-const VoterRegistration = ({params}:{params :{electionid : string}}) => {
+const VoterRegistrationForm = () => {
   // State variables to store form data
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [nrc, setNrc] = useState('');
-  const [province, setProvince] = useState('');
-  const [constituency, setConstituency] = useState('');
-  const [biometricData, setBiometricData] = useState('');
+  const [formData, setFormData] = useState({
+    fullName: '',
+    dateOfBirth: '',
+    gender: '',
+    nrcNumber: '',
+    nrcCopy: null,
+    phoneNumber: '',
+    address: '',
+    province: '',
+    constituency: '',
+  });
+
+  // State variable to track current step of the form
+  const [currentStep, setCurrentStep] = useState(1);
+
+  // Function to handle input change
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle file upload
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // setFormData((prevData) => ({
+      //   ...prevData,
+      //   nrcCopy: file,
+      // }));
+    }
+  };
 
   // Function to handle form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Implement logic to submit voter registration data
-    console.log('Submitting voter registration data:', { name, email, biometricData });
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Implement form submission logic
+    console.log(formData); // For demonstration, log form data to console
+  };
+
+  // Function to move to the next step
+  const nextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  // Function to move to the previous step
+  const prevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
   };
 
   return (
+    <div className='bg-green-100 min-h-screen'>
+      <div className='grid grid-cols-5 p-6 '>
+        <div className='col-span-1 bg-pink-600'>
+        <Image src={Logo} alt='e-Elect Logo' className='w-20 h-20 ' />
+        </div>
+        <div className='col-span-3 flex items-center  bg-blue-600 '>
+          <h1 className='text-xl text-black font-semibold mb-4'>Register for the /Election Name/</h1>
+        </div>
+        <div className='bg-purple-600'>
+        </div>
+      </div>
     <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white">
-      <h2 className="text-xl font-semibold mb-4">Voter Registration</h2>
-      <p>ID: {params.electionid}</p>
+      <h2 className="text-xl font-semibold mb-4 text-black">Voter Registration Form</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-          <input type="text" id="name" className="mt-1 p-2 block w-full border-gray-300 rounded-md" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-          <input type="email" id="email" className="mt-1 p-2 block w-full border-gray-300 rounded-md" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="biometricData" className="block text-sm font-medium text-gray-700">Biometric Data (Fingerprint)</label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <input type="text" id="biometricData" className="p-2 pr-10 block w-full border-gray-300 rounded-md" value={biometricData} onChange={(e) => setBiometricData(e.target.value)} required />
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <FingerPrintIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+        {currentStep === 1 && (
+          <>
+            <div className="mb-4">
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+              <input type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required />
             </div>
-          </div>
+            <div className="mb-4">
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">Date of Birth</label>
+              <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+              <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <div className="mb-4">
+              <label htmlFor="nrcNumber" className="block text-sm font-medium text-gray-700">NRC Number</label>
+              <input type="text" id="nrcNumber" name="nrcNumber" value={formData.nrcNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="nrcCopy" className="block text-sm font-medium text-gray-700">Upload Copy of NRC</label>
+              <div className="mt-1 flex items-center">
+                <input type="file" id="nrcCopy" onChange={handleFileUpload} className="hidden" />
+                <label htmlFor="nrcCopy" className="cursor-pointer flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                  <DocumentPlusIcon className="w-5 h-5 mr-2" />
+                  Choose File
+                </label>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+            </div>
+          </>
+        )}
+        {currentStep === 3 && (
+          <>
+            <div className="mb-4">
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700">Residential Address</label>
+              <textarea id="address" name="address" rows={3} value={formData.address} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="province" className="block text-sm font-medium text-gray-700">Province</label>
+              <select id="province" name="province" value={formData.province} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+                <option value="">Select Province</option>
+                <option value="lusaka">Lusaka</option>
+                <option value="copperbelt">Copperbelt</option>
+                <option value="Northern">Northern</option>
+                <option value="Southern">Southern</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Western">Western</option>
+                <option value="Muchinga">Muchinga</option>
+                <option value="Luapula">Luapula</option>
+                <option value="NorthWestern">North Western</option>
+                <option value="central">Central</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="constituency" className="block text-sm font-medium text-gray-700">Constituency</label>
+              <select id="constituency" name="constituency" value={formData.constituency} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+                <option value="">Select constituency</option>
+                <option value="lusaka">Lusaka</option>
+                <option value="copperbelt">Copperbelt</option>
+                <option value="Northern">Northern</option>
+                <option value="Southern">Southern</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Western">Western</option>
+                <option value="Muchinga">Muchinga</option>
+                <option value="Luapula">Luapula</option>
+                <option value="NorthWestern">North Western</option>
+                <option value="central">Central</option>
+              </select>
+            </div>
+          </>
+        )}
+        <div className="flex justify-between mt-8">
+          {currentStep > 1 && (
+            <button type="button" onClick={prevStep} className="inline-flex items-center px-4 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <ChevronLeftIcon className="w-5 h-5 mr-2" />
+              Previous
+            </button>
+          )}
+          {currentStep < 3 ? (
+            <button type="button" onClick={nextStep} className="inline-flex items-center px-4 py-2 border border-green-600 rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Next
+              <ChevronRightIcon className="w-5 h-5 ml-2" />
+            </button>
+          ) : (
+            <button type="submit" className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Submit
+            </button>
+          )}
         </div>
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Register</button>
       </form>
+    </div>
     </div>
   );
 };
 
-export default VoterRegistration;
+export default VoterRegistrationForm;
