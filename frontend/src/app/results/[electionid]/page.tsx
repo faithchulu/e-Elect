@@ -1,40 +1,44 @@
 "use client"
-import { useState } from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
+import React from 'react';
 
-interface BallotOption {
-  id: number;
-  option: string;
-  votes: number;
-}
+const ResultsPage = () => {
+  // Mock data for demonstration
+  const resultsData = [
+    { candidate: 'John Doe', percentage: 58.67, votes: 56783 },
+    { candidate: 'Jane Smith', percentage: 30.25, votes: 29345 },
+    { candidate: 'Michael Johnson', percentage: 11.08, votes: 10784 },
+  ];
 
-const TallyingModule = () => {
-  // Mock data for ballot options with initial vote counts
-  const [ballotOptions, setBallotOptions] = useState<BallotOption[]>([
-    { id: 1, option: 'Option 1', votes: 10 },
-    { id: 2, option: 'Option 2', votes: 15 },
-    { id: 3, option: 'Option 3', votes: 8 },
-    // Add more options as needed
-  ]);
+  const totalVotes = resultsData.reduce((total, candidate) => total + candidate.votes, 0);
 
   return (
-    <div className='py-30'>
+    <div className=" px-4 py-30">
       <HorizontalNav/>
-      <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white">
-        <h2 className="text-xl font-semibold mb-4">Vote Tally</h2>
-        <p className="text-gray-600 mb-4">Real-time vote tallying:</p>
-        <div className="space-y-2">
-          {ballotOptions.map((option) => (
-            <div key={option.id} className="flex items-center">
-              <span className="font-semibold">{option.option}</span>
-              <span className="ml-auto">{option.votes} votes</span>
+      <h1 className="text-2xl text-black font-semibold mb-4">Election title Results</h1>
+      <div className="bg-white rounded-lg shadow-lg p-6">
+        {resultsData.map((candidateData, index) => (
+          <div key={index} className="mb-4">
+            <h2 className="text-lg font-semibold">{candidateData.candidate}</h2>
+            <div className="relative bg-gray-200 rounded-full h-8 mt-2">
+              <div
+                className="absolute top-0 left-0 bg-green-500 rounded-full h-4"
+                style={{ width: `${candidateData.percentage}%` }}
+              ></div>
+              <div className="absolute top-1/2 transform -translate-y-1/2 right-4 text-sm text-gray-700">
+                {`${candidateData.percentage.toFixed(2)}% (${candidateData.votes.toLocaleString()} votes)`}
+              </div>
             </div>
-          ))}
+          </div>
+        ))}
+        <div className="mt-4 ">
+          <hr className='border-gray-700 mb-4'></hr>
+          <p className="text-lg font-semibold">Total Votes Cast:</p>
+          <p className="text-xl">{totalVotes.toLocaleString()}</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default TallyingModule;
+export default ResultsPage;

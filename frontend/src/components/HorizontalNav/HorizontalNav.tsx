@@ -13,7 +13,7 @@ const HorizontalNav= () => {
             className="h-16 w-auto"
           />
           <div>
-            <span className="ml-2 text-xl font-bold">e-Elect</span>
+            <a href="/"><span className="ml-2 text-xl font-bold">e-Elect</span></a>
             <p className="text-blue-300 text-sm"> Revolutionizing Voting in Zambia!</p>
           </div>
         </div>

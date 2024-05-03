@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Candidateone from "../../../../public/images/candidates/candidate1.jpg"
 import Candidatetwo from "../../../../public/images/candidates/candidate2.jpg"
+import Candidatethree from "../../../../public/images/candidates/CandidateThree.jpg"
+import Candidatefour from "../../../../public/images/candidates/CandidateFour.jpg"
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 import Link from "next/link";
 
@@ -25,14 +27,14 @@ const candidates = [
   name: 'John Doe',
   party: 'Unity Party',
   slogan: 'Together we thrive',
-  image: Candidateone, 
+  image: Candidatethree, 
 },
 {
   id: "4",
   name: 'Jane Smith',
   party: 'Progressive Alliance',
   slogan: 'Moving forward, together',
-  image: Candidatetwo, 
+  image: Candidatefour, 
 },
   // Add more candidate objects as needed
 ];
