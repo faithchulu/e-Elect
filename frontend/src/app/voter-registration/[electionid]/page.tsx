@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon, DocumentPlusIcon } from '@heroicons/react/24/outline';
 import Logo from '../../../../public/images/logo/e-Elect-Logo.png'
 import Image from 'next/image';
+import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
 
 const VoterRegistrationForm = () => {
   // State variables to store form data
@@ -59,18 +60,10 @@ const VoterRegistrationForm = () => {
   };
 
   return (
-    <div className='bg-green-100 min-h-screen'>
-      <div className='grid grid-cols-5 p-6 '>
-        <div className='col-span-1 bg-pink-600'>
-        <Image src={Logo} alt='e-Elect Logo' className='w-20 h-20 ' />
-        </div>
-        <div className='col-span-3 flex items-center  bg-blue-600 '>
-          <h1 className='text-xl text-black font-semibold mb-4'>Register for the /Election Name/</h1>
-        </div>
-        <div className='bg-purple-600'>
-        </div>
-      </div>
-    <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white">
+    <div className='bg-green-100 min-h-screen py-30'>
+      <HorizontalNav/>
+      
+    <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white ">
       <h2 className="text-xl font-semibold mb-4 text-black">Voter Registration Form</h2>
       <form onSubmit={handleSubmit}>
         {currentStep === 1 && (

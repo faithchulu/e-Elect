@@ -4,6 +4,7 @@ import { ClockIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/re
 import Logo from '../../public/images/logo/e-Elect-Logo.png'
 import HomeBG from '../../public/images/backgrounds/zambia_flag.png'
 import Image from 'next/image';
+import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
 
 interface Election {
   id: number;
@@ -77,13 +78,14 @@ const ElectionCard = ({ election }: { election: Election }) => {
 
 const LandingPage = () => {
   return (
-    <div className="bg-[url('/images/backgrounds/zambia_flag.png')] bg-no-repeat bg-cover ">
+    <div className="bg-[url('/images/backgrounds/zambia_flag.png')] bg-no-repeat bg-cover min-h-screen">
 
-      <div className="relative z-10 bg-black bg-opacity-60" >
-        <div className="bg-black bg-opacity-60 p-4 rounded-lg">
+      <div className="relative bg-black bg-opacity-60  min-h-screen py-24" >
+     
+        <HorizontalNav />
           
-          <Image src={Logo} alt='e-Elect Logo' className='w-20 h-20 ' />
-          <p className="text-gray-300 mb-8"> Revolutionizing Voting in Zambia!</p>
+        <div className='p-4'>
+          
 
           <h2 className="text-xl font-semibold mb-4 text-white">Currently Active Elections</h2>
 
