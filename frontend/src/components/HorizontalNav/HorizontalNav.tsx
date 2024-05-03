@@ -21,16 +21,16 @@ const HorizontalNav= () => {
         {/* Navigation items */}
         <ul className="flex space-x-4">
           <li>
-            <a href="#" className="hover:text-gray-300">Home</a>
+            <a href="/" className="hover:text-gray-300">Home</a>
           </li>
           <li>
-            <a href="#" className="hover:text-gray-300">Active Elections</a>
+            <a href="/active-elections" className="hover:text-gray-300">Active Elections</a>
           </li>
           <li>
-            <a href="#" className="hover:text-gray-300">Closed Elections</a>
+            <a href="/closed-elections" className="hover:text-gray-300">Closed Elections</a>
           </li>
           <li>
-            <a href="#" className="hover:text-gray-300">Info</a>
+            <a href="Info" className="hover:text-gray-300">Info</a>
           </li>
         </ul>
       </div>

@@ -1,52 +1,75 @@
 "use client"
-import { useState } from 'react';
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import Image from "next/image";
+import Candidateone from "../../../../public/images/candidates/candidate1.jpg"
+import Candidatetwo from "../../../../public/images/candidates/candidate2.jpg"
+import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
+import Link from "next/link";
 
-interface BallotOption {
-  id: number;
-  option: string;
-}
+const candidates = [
+  {
+    id: "1",
+    name: 'John Doe',
+    party: 'Unity Party',
+    slogan: 'Together we thrive',
+    image: Candidateone, 
+  },
+  {
+    id: "2",
+    name: 'Jane Smith',
+    party: 'Progressive Alliance',
+    slogan: 'Moving forward, together',
+    image: Candidatetwo, 
+  },
+  {
+  id: "3",
+  name: 'John Doe',
+  party: 'Unity Party',
+  slogan: 'Together we thrive',
+  image: Candidateone, 
+},
+{
+  id: "4",
+  name: 'Jane Smith',
+  party: 'Progressive Alliance',
+  slogan: 'Moving forward, together',
+  image: Candidatetwo, 
+},
+  // Add more candidate objects as needed
+];
 
-const VotingModule = ({params}:{params :{electionid : string}}) => {
-  // State variables to store selected option and ballot options
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const ballotOptions: BallotOption[] = [
-    { id: 1, option: 'Option 1' },
-    { id: 2, option: 'Option 2' },
-    { id: 3, option: 'Option 3' },
-    // Add more options as needed
-  ];
-
-  // Function to handle selecting an option
-  const handleSelectOption = (optionId: number) => {
-    setSelectedOption(optionId);
-  };
-
-  // Function to handle submitting the vote
-  const handleSubmitVote = () => {
-    // Implement logic to submit the vote with selected option
-    console.log('Submitting vote:', selectedOption);
+const CastVoteScreen = ({params}:{params :{candidateId : string}}) => {
+  const handleVoteClick = (candidateId : string ) => {
+    // Implement logic to handle voting for the candidate with the given ID
+    console.log(`Vote casted for candidate with ID ${candidateId}`);
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white">
-      <h2 className="text-xl font-semibold mb-4">Voting</h2>
-      <p>ID: {params.electionid}</p>
-      <p className="text-gray-600 mb-4">Please select your preferred option:</p>
-      <div className="space-y-2">
-        {ballotOptions.map((option) => (
-          <div key={option.id} className="flex items-center">
-            <input type="radio" id={`option-${option.id}`} name="option" className="form-radio h-4 w-4 text-blue-500" value={option.id} checked={selectedOption === option.id} onChange={() => handleSelectOption(option.id)} />
-            <label htmlFor={`option-${option.id}`} className="ml-2">{option.option}</label>
+    <div className="container mx-auto px-4 py-30">
+      <HorizontalNav />
+      <h1 className="text-2xl font-semibold text-black mb-4">Cast Your Vote</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {candidates.map((candidate) => (
+          <div key={candidate.id} className="bg-white rounded-md shadow-md flex items-center border border-blue-700">
+            <div className="flex-none w-24 h-24 rounded-l-md overflow-hidden">
+              <Image src={candidate.image} alt={candidate.name} className="w-auto h-fill object-cover" />
+            </div>
+            <div className="flex-auto flex flex-col justify-center p-4 bg-green-700 ">
+              <h2 className="text-lg text-white font-semibold">{candidate.name}</h2>
+              <p className="text-white">{candidate.party}</p>
+              <p className="mt-2 text-white">{candidate.slogan}</p>
+              <Link
+              href="cast-vote/voter-auth/id"
+                className="flex-none bg-white text-black py-2 px-4 mt-2 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                onClick={() => handleVoteClick(candidate.id)}
+              >
+                Vote
+              </Link>
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={handleSubmitVote} className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center">
-        <span>Submit Vote</span>
-        <CheckCircleIcon className="w-5 h-5 ml-2" />
-      </button>
     </div>
   );
 };
 
-export default VotingModule;
+export default CastVoteScreen;

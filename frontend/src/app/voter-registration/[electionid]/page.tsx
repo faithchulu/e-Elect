@@ -4,6 +4,7 @@ import { ChevronRightIcon, ChevronLeftIcon, DocumentPlusIcon } from '@heroicons/
 import Logo from '../../../../public/images/logo/e-Elect-Logo.png'
 import Image from 'next/image';
 import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
+import VoteBG from '../../../../public/images/backgrounds/vote-bg.jpg'
 
 const VoterRegistrationForm = () => {
   // State variables to store form data
@@ -60,7 +61,10 @@ const VoterRegistrationForm = () => {
   };
 
   return (
-    <div className='bg-green-100 min-h-screen py-30'>
+    <div className="bg-[url('/images/backgrounds/vote-bg.jpg')] bg-no-repeat bg-cover min-h-screen">
+
+    <div className='bg-green-100 bg-opacity-90 min-h-screen py-30'>
+
       <HorizontalNav/>
       
     <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white ">
@@ -169,6 +173,8 @@ const VoterRegistrationForm = () => {
       </form>
     </div>
     </div>
+  </div>
+
   );
 };
 
