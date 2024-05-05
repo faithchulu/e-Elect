@@ -24,13 +24,13 @@ const HorizontalNav= () => {
             <a href="/" className="hover:text-gray-300">Home</a>
           </li>
           <li>
-            <a href="/active-elections" className="hover:text-gray-300">Active Elections</a>
+            <a href="/cast-vote/37848dhhd8" className="hover:text-gray-300">Cast Vote</a>
           </li>
           <li>
-            <a href="/closed-elections" className="hover:text-gray-300">Closed Elections</a>
+            <a href="/voter-registration/2345" className="hover:text-gray-300">Register</a>
           </li>
           <li>
-            <a href="Info" className="hover:text-gray-300">Info</a>
+            <a href="/results/2456" className="hover:text-gray-300">Results</a>
           </li>
         </ul>
       </div>

@@ -60,7 +60,7 @@ const CastVoteScreen = ({params}:{params :{candidateId : string}}) => {
               <p className="text-white">{candidate.party}</p>
               <p className="mt-2 text-white">{candidate.slogan}</p>
               <Link
-              href="cast-vote/voter-auth/id"
+              href="voter-auth/id"
                 className="flex-none bg-white text-black py-2 px-4 mt-2 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 onClick={() => handleVoteClick(candidate.id)}
               >
