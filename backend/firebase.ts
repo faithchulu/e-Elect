@@ -4,8 +4,12 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { Firestore } from 'firebase/firestore';
 
+
+const apiKey = process.env.API_KEY
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyAh7k192IU2Q3913VTHdFh0dQV-cIYoszY",
+    apiKey: apiKey,
     authDomain: "evoting-f6e59.firebaseapp.com",
     projectId: "evoting-f6e59",
     storageBucket: "evoting-f6e59.appspot.com",
