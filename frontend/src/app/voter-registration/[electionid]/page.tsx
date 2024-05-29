@@ -64,7 +64,7 @@ const VoterRegistrationForm = () => {
   return (
     <div className="bg-[url('/images/backgrounds/vote-bg.jpg')] bg-no-repeat bg-cover min-h-screen">
 
-    <div className='bg-green-100 bg-opacity-90 min-h-screen py-30 px-4'>
+    <div className="bg-green-100 bg-opacity-90 min-h-screen py-30 px-4">
 
       <HorizontalNav/>
       

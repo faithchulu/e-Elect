@@ -51,7 +51,7 @@ const VoterAuthForm = () => {
           <div className=" flex flex-col justify-center">
             <h1 className="text-2xl text-black font-semibold mb-4">Step 2: Scan Fingerprint</h1>
             <FingerPrintIcon className="h-20"/>
-            <p className="mb-4">Please place your finger on your device's fingerprint scanner for authentication.</p>
+            <p className="mb-4">Please place your finger the fingerprint scanner for authentication.</p>
             <button onClick={handleFingerprintScan} className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
               Scan Fingerprint
             </button>
