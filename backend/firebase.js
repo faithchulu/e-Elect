@@ -21,6 +21,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Get a Firestore instance and assert its type
-const db: Firestore = getFirestore(app);
+const db = getFirestore(app);
 
 export { db };

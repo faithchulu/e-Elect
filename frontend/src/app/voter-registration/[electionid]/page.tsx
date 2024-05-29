@@ -46,7 +46,8 @@ const VoterRegistrationForm = () => {
   // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Implement form submission logic
+
+    window.location.href = '/';
     console.log(formData); // For demonstration, log form data to console
   };
 
@@ -63,7 +64,7 @@ const VoterRegistrationForm = () => {
   return (
     <div className="bg-[url('/images/backgrounds/vote-bg.jpg')] bg-no-repeat bg-cover min-h-screen">
 
-    <div className='bg-green-100 bg-opacity-90 min-h-screen py-30'>
+    <div className='bg-green-100 bg-opacity-90 min-h-screen py-30 px-4'>
 
       <HorizontalNav/>
       
@@ -74,15 +75,15 @@ const VoterRegistrationForm = () => {
           <>
             <div className="mb-4">
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required />
+              <input type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" />
             </div>
             <div className="mb-4">
               <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">Date of Birth</label>
-              <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required />
+              <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"  />
             </div>
             <div className="mb-4">
               <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
-              <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+              <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -94,7 +95,7 @@ const VoterRegistrationForm = () => {
           <>
             <div className="mb-4">
               <label htmlFor="nrcNumber" className="block text-sm font-medium text-gray-700">NRC Number</label>
-              <input type="text" id="nrcNumber" name="nrcNumber" value={formData.nrcNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+              <input type="text" id="nrcNumber" name="nrcNumber" value={formData.nrcNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"  />
             </div>
             <div className="mb-4">
               <label htmlFor="nrcCopy" className="block text-sm font-medium text-gray-700">Upload Copy of NRC</label>
@@ -108,7 +109,7 @@ const VoterRegistrationForm = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
-              <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+              <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"  />
             </div>
           </>
         )}
@@ -116,11 +117,11 @@ const VoterRegistrationForm = () => {
           <>
             <div className="mb-4">
               <label htmlFor="address" className="block text-sm font-medium text-gray-700">Residential Address</label>
-              <textarea id="address" name="address" rows={3} value={formData.address} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required />
+              <textarea id="address" name="address" rows={3} value={formData.address} onChange={handleChange} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
             </div>
             <div className="mb-4">
               <label htmlFor="province" className="block text-sm font-medium text-gray-700">Province</label>
-              <select id="province" name="province" value={formData.province} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+              <select id="province" name="province" value={formData.province} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" >
                 <option value="">Select Province</option>
                 <option value="lusaka">Lusaka</option>
                 <option value="copperbelt">Copperbelt</option>
@@ -136,7 +137,7 @@ const VoterRegistrationForm = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="constituency" className="block text-sm font-medium text-gray-700">Constituency</label>
-              <select id="constituency" name="constituency" value={formData.constituency} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+              <select id="constituency" name="constituency" value={formData.constituency} onChange={handleChange} className="mt-1  p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500" >
                 <option value="">Select constituency</option>
                 <option value="lusaka">Lusaka</option>
                 <option value="copperbelt">Copperbelt</option>

@@ -1,10 +1,10 @@
 // controllers/VoterController.ts
-import { Request, Response } from 'express';
-import { registerVoter } from '../services/VoterService';
-import { Voter } from '../models/Voter';
+// import { Request, Response } from 'express';
+const registerVoter = require('../services/VoterService');
+const voter = require('../models/Voter');
 
-export const registerVoterController = async (req: Request, res: Response): Promise<void> => {
-  const voterData: Voter = req.body;
+const registerVoterController = async (req, res) => {
+  const voterData = req.body;
   try {
     await registerVoter(voterData);
     res.status(201).send('Voter registered successfully');
