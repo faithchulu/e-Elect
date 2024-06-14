@@ -20,10 +20,12 @@ app.use(cors({
 // Import routes
 const votingRoutes = require('./routes/votingRoutes');
 const tallyingRoutes = require('./routes/tallyingRoutes');
+const voterRoutes = require('./routes/voterRoutes');
 
 // Use routes
 app.use('/api/voting', votingRoutes);
 app.use('/api/tallying', tallyingRoutes);
+app.use('/api/voter', voterRoutes);
 
 
 const PORT = 4000;
