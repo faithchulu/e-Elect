@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
+const {db} = require('./firebase')
 
 // Middleware
 app.use(express.json())
