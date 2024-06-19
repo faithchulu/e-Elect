@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ClockIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import Logo from '../../public/images/logo/e-Elect-Logo.png'
-import HomeBG from '../../public/images/backgrounds/zambia_flag.png'
 import Image from 'next/image';
 import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
+import Logo from '../../public/images/logo/e-Elect-Logo.png';
+import HomeBG from '../../public/images/backgrounds/zambia_flag.png';
 
 interface Election {
   id: number;
@@ -69,7 +69,7 @@ const ElectionCard = ({ election }: { election: Election }) => {
         {getStatusIcon(election.status)}
       </div>
       <p className="mt-2 text-gray-300">{getStatusText(election.status)}</p>
-      <Link href={election.status === 'registration' ? '/voter-registration/2345' : election.status=== 'voting' ? '/cast-vote/37848dhhd8' : '/results/37848dhhd8'} className="mt-4 block w-full text-center bg-green-600 text-white py-2 rounded-md hover:bg-green-500">
+      <Link href={election.status === 'registration' ? '/voter-registration/2345' : election.status === 'voting' ? '/cast-vote/37848dhhd8' : '/results/37848dhhd8'} className="mt-4 block w-full text-center bg-green-600 text-white py-2 rounded-md hover:bg-green-500">
         {getActionText(election.status)}
       </Link>
     </div>
@@ -78,23 +78,26 @@ const ElectionCard = ({ election }: { election: Election }) => {
 
 const LandingPage = () => {
   return (
-    <div className="bg-[url('/images/backgrounds/zambia_flag.png')] bg-no-repeat bg-cover min-h-screen">
-
-      <div className="relative bg-black bg-opacity-60  min-h-screen py-24" >
-     
+    <div className="relative min-h-screen">
+      <div className="absolute inset-0">
+        <Image
+          src={HomeBG}
+          alt="Background"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+      </div>
+      <div className="relative z-10 min-h-screen py-24">
         <HorizontalNav />
-          
-        <div className='p-4'>
-          
-
+        <div className="p-4">
           <h2 className="text-xl font-semibold mb-4 text-white">Currently Active Elections</h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {activeElections.map((election) => (
               <ElectionCard key={election.id} election={election} />
             ))}
           </div>
-  
           <h2 className="text-xl font-semibold mt-8 mb-4 text-white">Historical Elections</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {historicalElections.map((election) => (

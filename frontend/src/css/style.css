@@ -241,3 +241,14 @@ input[type="search"]::-webkit-search-cancel-button {
 [x-cloak] {
     display: none !important;
 }
+
+@keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .blink-animation {
+    animation: blink 1s step-start infinite;
+  }
+  

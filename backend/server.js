@@ -1,14 +1,10 @@
-// app.ts
 const express = require('express');
-const voterRoutes = require('./routes/voterRoutes');
-const candidateRoutes = require('./routes/candidateRoutes');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
 
 // Middleware
-
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,9 +18,13 @@ app.use(cors({
 }))
 
 
-// Routes
-app.use('/api/users', voterRoutes);
-app.use('/api/candidates', candidateRoutes);
+// Import routes
+const votingRoutes = require('./routes/votingRoutes');
+const tallyingRoutes = require('./routes/tallyingRoutes');
+
+// Use routes
+app.use('/api/voting', votingRoutes);
+app.use('/api/tallying', tallyingRoutes);
 
 
 
