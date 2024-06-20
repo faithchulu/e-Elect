@@ -27,7 +27,6 @@ app.use('/api/voting', votingRoutes);
 app.use('/api/tallying', tallyingRoutes);
 
 
-
 const PORT = 4000;
 
 app.listen(PORT, () => {
