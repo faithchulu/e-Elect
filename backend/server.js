@@ -16,7 +16,6 @@ app.use(cors({
     preflightContinue: false,
 }))
 
-
 // Import routes
 const votingRoutes = require('./routes/votingRoutes');
 const tallyingRoutes = require('./routes/tallyingRoutes');
