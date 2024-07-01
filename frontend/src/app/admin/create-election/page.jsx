@@ -17,7 +17,7 @@ const CreateElection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can handle the form submission, e.g., sending the data to the server.
+    
     const formData = new FormData();
     formData.append('electionName', electionName);
     formData.append('politicalParty', politicalParty);
