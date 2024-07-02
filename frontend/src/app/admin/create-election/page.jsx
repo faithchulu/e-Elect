@@ -41,7 +41,7 @@ const CreateElection = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto bg-white p-4">
         <h2 className="text-2xl font-bold mb-4">Create Election</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

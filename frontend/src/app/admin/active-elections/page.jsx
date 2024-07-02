@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ElectionCard from '@/components/Cards/ElectionCard'; // Adjust the import path as necessary
 import { BASE_URL } from '@/config/index';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 const edata = [ {
   id : 1,
@@ -48,7 +50,13 @@ const ActiveElections = () => {
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">Active Elections</h2>
+        <div className='flex justify-between'>
+          <h2 className="text-2xl font-bold mb-4">Active Elections</h2>
+          <Link href='' className="flex bg-meta-4 rounded-md shadow-lg px-2 py-1.5 text-white">
+            <PlusCircleIcon className='h-6 w-6'/>
+            New Election
+          </Link>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {elections.length > 0 ? (
             edata.map((election) => (
