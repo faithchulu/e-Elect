@@ -4,7 +4,9 @@ import React from 'react'
 const AdminHome = () => {
   return (
     <DefaultLayout>
-        <div>Home page</div>
+        <div>Home page
+          some sats needed here
+        </div>
     </DefaultLayout>
   )
 }
