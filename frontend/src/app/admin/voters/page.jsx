@@ -6,6 +6,9 @@ const Voters = () => {
     <DefaultLayout>
 
         <div>Voters</div>
+        <table>
+          some data here
+        </table>
     </DefaultLayout>
   )
 }
