@@ -37,9 +37,9 @@ const HistoricalElectionCard: React.FC<ElectionCardProps> = ({
       <p className="mt-2"><strong>Political Party:</strong> {politicalParty}</p>
       <p className="mt-1"><strong>Party Slogan:</strong> {partySlogan}</p>
       <p className="mt-1"><strong>Candidate Name:</strong> {candidateName}</p>
-      <div className="mt-2">
+      {/* <div className="mt-2">
         <Image src={candidateImage} alt={candidateName} className="w-full h-28 object-cover rounded-lg" />
-      </div>
+      </div> */}
       <p className="mt-2"><strong>Voting Starts:</strong> {new Date(votingStartDate).toLocaleString()}</p>
       <p className="mt-1"><strong>Voting Ends:</strong> {new Date(votingEndDate).toLocaleString()}</p>
       <Link

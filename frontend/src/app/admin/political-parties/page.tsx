@@ -1,9 +1,9 @@
 import React from 'react'
 
-const page = () => {
+const PoliticalParties = () => {
   return (
-    <div>page</div>
+    <div>PoliticalParties</div>
   )
 }
 
-export default page
+export default PoliticalParties
