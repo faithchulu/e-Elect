@@ -9,11 +9,9 @@ import Link from 'next/link';
 
 const edata = [ {
   id : 1,
-  name : "Test",
-  politicalParty : "Party A",
-  partySlogan : "Slogan a",
-  candidateName : "candidateName",
-  candidateImage : " election.candidateImage ",
+  name : "Election Name",
+  decsription : "Party A",
+  noOfCandidates : "5",
   votingStartDate : "03/04/2022",
   votingEndDate   : " 04/05/2022",
 }
@@ -52,7 +50,7 @@ const ActiveElections = () => {
       <div className="container mx-auto p-4">
         <div className='flex justify-between'>
           <h2 className="text-2xl font-bold mb-4">Active Elections</h2>
-          <Link to="/active-election/create-election" className="flex bg-meta-4 rounded-md shadow-lg px-2 py-1.5 text-white">
+          <Link href="/active-election/create-election" className="flex bg-meta-4 rounded-md shadow-lg px-2 py-1.5 text-white">
             <PlusCircleIcon className='h-6 w-6'/>
             New Election
           </Link>
@@ -63,10 +61,8 @@ const ActiveElections = () => {
               <ElectionCard
                 key={election.id}
                 electionName={election.name}
-                politicalParty={election.politicalParty}
-                partySlogan={election.partySlogan}
-                candidateName={election.candidateName}
-                candidateImage={election.candidateImage}
+                decsription={election.decsription}
+                noOfCandidates={election.noOfCandidates}
                 votingStartDate={election.votingStartDate}
                 votingEndDate={election.votingEndDate}
                 onEdit={() => handleEdit(election.id)}
