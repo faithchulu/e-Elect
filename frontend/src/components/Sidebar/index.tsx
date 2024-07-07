@@ -5,8 +5,16 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
-import Logo from '../../../public/images/logo/logo2.png';
-import { ArchiveBoxArrowDownIcon, Cog6ToothIcon, DocumentIcon, FireIcon, HomeIcon, PlusCircleIcon, UsersIcon } from "@heroicons/react/24/outline";
+import Logo from "../../../public/images/logo/logo2.png";
+import {
+  ArchiveBoxArrowDownIcon,
+  Cog6ToothIcon,
+  DocumentIcon,
+  FireIcon,
+  HomeIcon,
+  PlusCircleIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -70,14 +78,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/" className="flex items-center">
-          <Image
-            width={60}
-            height={60}
-            src={Logo}
-            alt="Logo"
-            priority
-          />
-          <h1 className="font-bold text-white text-4xl ml-4 shadow-md">e-Elect</h1>
+          <Image width={60} height={60} src={Logo} alt="Logo" priority />
+          <h1 className="ml-4 text-4xl font-bold text-white shadow-md">
+            e-Elect
+          </h1>
         </Link>
 
         <button
@@ -114,7 +118,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
-
               {/* <!-- Menu Item Dashboard --> */}
               <li>
                 <Link
@@ -124,7 +127,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-green-900 dark:bg-green-900"
                   }`}
                 >
-                  <HomeIcon className="w-6 h-6"/>
+                  <HomeIcon className="h-6 w-6" />
                   Dashboard
                 </Link>
               </li>
@@ -139,7 +142,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-green-900 dark:bg-green-900"
                   }`}
                 >
-                  <FireIcon className="w-6 h-6"/>
+                  <FireIcon className="h-6 w-6" />
                   Active Elections
                 </Link>
               </li>
@@ -154,7 +157,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-green-900 dark:bg-green-900"
                   }`}
                 >
-                  <ArchiveBoxArrowDownIcon className="w-6 h-6"/>
+                  <ArchiveBoxArrowDownIcon className="h-6 w-6" />
                   Historical Elections
                 </Link>
               </li>
@@ -169,14 +172,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-green-900 dark:bg-green-900"
                   }`}
                 >
-                  <UsersIcon className="w-6 h-6"/>
+                  <UsersIcon className="h-6 w-6" />
                   Voters
                 </Link>
               </li>
               {/* <!-- Menu Item Voters --> */}
-
-
-              </ul>
+            </ul>
           </div>
 
           {/* <!-- Others Group --> */}
@@ -195,12 +196,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     "bg-green-900 dark:bg-green-900"
                   }`}
                 >
-                  <Cog6ToothIcon className="w-6 h-6"/>
+                  <Cog6ToothIcon className="h-6 w-6" />
                   Settings
                 </Link>
               </li>
               {/* <!-- Menu Item Settings --> */}
-              </ul>
+            </ul>
           </div>
         </nav>
         {/* <!-- Sidebar Menu --> */}

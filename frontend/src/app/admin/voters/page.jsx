@@ -1,16 +1,13 @@
-import React from 'react'
-import DefaultLayout from '@/components/Layouts/DefaultLayout'
+import React from "react";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
 const Voters = () => {
   return (
     <DefaultLayout>
-
-        <div>Voters</div>
-        <table>
-          some data here
-        </table>
+      <div>Voters</div>
+      <table>some data here</table>
     </DefaultLayout>
-  )
-}
+  );
+};
 
-export default Voters
+export default Voters;
