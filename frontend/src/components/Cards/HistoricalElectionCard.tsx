@@ -1,7 +1,7 @@
 import React from 'react';
 import { PencilIcon } from '@heroicons/react/24/solid';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ElectionCardProps {
   electionName: string;
@@ -38,7 +38,7 @@ const HistoricalElectionCard: React.FC<ElectionCardProps> = ({
       <p className="mt-1"><strong>Party Slogan:</strong> {partySlogan}</p>
       <p className="mt-1"><strong>Candidate Name:</strong> {candidateName}</p>
       <div className="mt-2">
-        <img src={candidateImage} alt={candidateName} className="w-full h-28 object-cover rounded-lg" />
+        <Image src={candidateImage} alt={candidateName} className="w-full h-28 object-cover rounded-lg" />
       </div>
       <p className="mt-2"><strong>Voting Starts:</strong> {new Date(votingStartDate).toLocaleString()}</p>
       <p className="mt-1"><strong>Voting Ends:</strong> {new Date(votingEndDate).toLocaleString()}</p>
