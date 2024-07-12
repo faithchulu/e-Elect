@@ -3,6 +3,7 @@ import { PencilIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 
 interface ElectionCardProps {
+  electionId : string;
   electionName: string;
   decsription: string;
   noOfCandidates: string;

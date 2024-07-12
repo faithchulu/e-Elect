@@ -1,8 +1,11 @@
 import React from 'react'
+import DefaultLayout from '@/components/Layouts/DefaultLayout'
 
 const PoliticalParties = () => {
   return (
-    <div>PoliticalParties</div>
+    <DefaultLayout>
+      <div>PoliticalParties</div>
+    </DefaultLayout>
   )
 }
 

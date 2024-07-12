@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import HistoricalElectionCard from '@/components/Cards/HistoricalElectionCard'; // Adjust the import path as necessary
 import { BASE_URL } from '@/config/index';
+import ElectionCard from '@/components/Cards/ElectionCard';
 
 const edata = [ {
   id : 1,
