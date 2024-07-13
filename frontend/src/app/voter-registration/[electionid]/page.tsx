@@ -5,6 +5,7 @@ import Image from 'next/image';
 import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
 import VoteBG from '../../../../public/images/backgrounds/vote-bg.jpg';
 import Link from 'next/link';
+import axios from 'axios';
 
 const VoterRegistrationForm = () => {
   // Define the state type to allow both null and File for nrcCopy
@@ -13,7 +14,6 @@ const VoterRegistrationForm = () => {
     dateOfBirth: string;
     gender: string;
     nrcNumber: string;
-    nrcCopy: File | null;
     phoneNumber: string;
     address: string;
     province: string;
@@ -26,7 +26,6 @@ const VoterRegistrationForm = () => {
     dateOfBirth: '',
     gender: '',
     nrcNumber: '',
-    nrcCopy: null,
     phoneNumber: '',
     address: '',
     province: '',
@@ -45,20 +44,17 @@ const VoterRegistrationForm = () => {
     }));
   };
 
-  // Function to handle file upload
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFormData((prevData) => ({
-        ...prevData,
-        nrcCopy: file,
-      }));
-    }
-  };
+  
 
   // Function to handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    try{
+      axios.post("http://localhost:4000/api/voter/register", formData);
+    } catch(error){
+      console.log(error )
+    }
+
     console.log(formData); // For demonstration, log form data to console
     // window.location.href = '/'; // Navigate to home only on submit
   };
@@ -143,16 +139,7 @@ const VoterRegistrationForm = () => {
                     className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
-                <div className="mb-4">
-                  <label htmlFor="nrcCopy" className="block text-sm font-medium text-gray-700">Upload Copy of NRC</label>
-                  <div className="mt-1 flex items-center">
-                    <input type="file" id="nrcCopy" onChange={handleFileUpload} className="hidden" />
-                    <label htmlFor="nrcCopy" className="cursor-pointer flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                      <DocumentPlusIcon className="w-5 h-5 mr-2" />
-                      Choose File
-                    </label>
-                  </div>
-                </div>
+                
                 <div className="mb-4">
                   <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
                   <input
