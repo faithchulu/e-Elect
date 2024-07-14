@@ -5,3 +5,5 @@ var serviceAccount = require("./serviceAccount/evoting-f6e59-firebase-adminsdk-v
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+
+module.exports = admin;
