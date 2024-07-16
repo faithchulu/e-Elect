@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
     console.error("Error registering voter:", error);
     res
       .status(500)
-      .json({ message: "Failed to register voter", error: error.message });
+      .json({ message: "Failed to register voter in route", error: error.message });
   }
 });
 
