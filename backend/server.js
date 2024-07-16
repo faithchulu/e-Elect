@@ -1,8 +1,7 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
-const app = express();
 const { db } = require("./firebaseAdmin");
 
 // Middleware
@@ -38,3 +37,4 @@ const PORT = 4000;
 app.listen(PORT, () => {
   console.log(`E-Voting Backend Server running on http://localhost:${PORT}`);
 });
+
