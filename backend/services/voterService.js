@@ -42,7 +42,7 @@ async function registerVoter({
       constituency,
     };
   } catch (error) {
-    throw new Error("Failed to register voter in service: " + error.message);
+    throw new Error("Failed to register voter: " + error.message);
   }
 }
 
