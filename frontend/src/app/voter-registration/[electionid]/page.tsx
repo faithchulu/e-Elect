@@ -4,7 +4,6 @@ import { ChevronRightIcon, ChevronLeftIcon, DocumentPlusIcon } from '@heroicons/
 import Image from 'next/image';
 import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
 import VoteBG from '../../../../public/images/backgrounds/vote-bg.jpg';
-import Link from 'next/link';
 import axios from 'axios';
 
 const VoterRegistrationForm = () => {
@@ -47,16 +46,14 @@ const VoterRegistrationForm = () => {
   
 
   // Function to handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try{
-      axios.post("http://localhost:4000/api/voter/register", formData);
+       await axios.post("http://localhost:4000/api/voter/register", formData);
+       console.log("Voter registered successfully!")
     } catch(error){
       console.log(error )
     }
-
-    console.log(formData); // For demonstration, log form data to console
-    // window.location.href = '/'; // Navigate to home only on submit
   };
 
   // Function to move to the next step
@@ -233,14 +230,14 @@ const VoterRegistrationForm = () => {
                   <ChevronRightIcon className="w-5 h-5 ml-2" />
                 </button>
               ) : (
-                <Link href='/' >
+                
                   <button
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                     Submit
                   </button>
-                </Link>
+                
               )}
             </div>
           </form>
