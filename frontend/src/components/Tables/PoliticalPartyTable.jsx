@@ -1,21 +1,18 @@
-const plans = [
+const parties = [
     {
       id: 1,
       name: 'Party A',
-      slogan: '4 GB RAM',
-      candidate: '4 CPUs',
-      editdelete: '128 GB SSD disk',
-      price: '$40',
-      isCurrent: false,
+      slogan: 'slogan a',
+      candidate: 'candidate a',
+      
     },
     {
       id: 2,
       name: 'Party B',
-      memory: '8 GB RAM',
-      cpu: '6 CPUs',
+      slogan: 'slogan b',
+      candidate: 'candidate b',
       storage: '256 GB SSD disk',
       price: '$80',
-      isCurrent: true,
     },
     // More plans...
   ]
@@ -24,7 +21,7 @@ const plans = [
     return classes.filter(Boolean).join(' ')
   }
   
-  export default function   () {
+  export default function PoliticalPartyTable  () {
     return (
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
@@ -64,30 +61,26 @@ const plans = [
                   Candidate
                 </th>
                 
-                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                  Actions
-                </th>
+                
                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                  <span className="sr-only">Select</span>
+                  <span className="">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {plans.map((plan, planIdx) => (
+              {parties.map((plan, planIdx) => (
                 <tr key={plan.id}>
                   <td
-                    className={classNames(
-                      planIdx === 0 ? '' : 'border-t border-transparent',
+                    className={classNames( 'border-t',
                       'relative py-4 pl-4 pr-3 text-sm sm:pl-6',
                     )}
                   >
                     <div className="font-medium text-gray-900">
                       {plan.name}
-                      {plan.isCurrent ? <span className="ml-1 text-indigo-600">(Current Plan)</span> : null}
                     </div>
                     <div className="mt-1 flex flex-col text-gray-500 sm:block lg:hidden">
                       <span>
-                        {plan.slogan} / {plan.cpu}
+                        {plan.slogan} / {plan.slogan}
                       </span>
                       <span className="hidden sm:inline">·</span>
                       
@@ -100,7 +93,7 @@ const plans = [
                       'hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell',
                     )}
                   >
-                    {plan.memory}
+                    {plan.slogan}
                   </td>
                   <td
                     className={classNames(
@@ -108,23 +101,21 @@ const plans = [
                       'hidden px-3 py-3.5 text-sm text-gray-500 lg:table-cell',
                     )}
                   >
-                    {plan.cpu}
+                    {plan.candidate}
                   </td>
                   
                   <td
                     className={classNames(
-                      planIdx === 0 ? '' : 'border-t border-transparent',
-                      'relative py-3.5 pl-3 pr-4 text-right text-sm font-medium sm:pr-6',
+                      planIdx === 0 ? '' : 'border-t border-',
+                      'relative py-3.5  text-right text-sm font-medium sm:pr-6',
                     )}
                   >
                     <button
                       type="button"
-                      disabled={plan.isCurrent}
                       className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                     >
-                      Select<span className="sr-only">, {plan.name}</span>
+                      Edit/Delete <span className="sr-only">, {plan.name}</span>
                     </button>
-                    {planIdx !== 0 ? <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" /> : null}
                   </td>
                 </tr>
               ))}
