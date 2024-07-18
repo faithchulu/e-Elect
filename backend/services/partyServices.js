@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 const db = admin.firestore();
-const userCollection = db.collection("parties");
+const partyCollection = db.collection("parties");
 
 // Function to create a party
 async function createParty({
