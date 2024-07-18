@@ -29,6 +29,26 @@ async function createParty({
   }
 }
 
+//get all parties
+const getParties = async () => {
+  try {
+      const snapshot = await partyCollection.get();
+      
+      const parties = [];
+      snapshot.forEach(doc => {
+        parties.push({
+              id: doc.id,
+              ...doc.data()
+          });
+      });
+      return { success: true, data: parties };
+  } catch (error) {
+      console.error('Error getting parties:', error);
+      return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   createParty,
+  getParties,
 };

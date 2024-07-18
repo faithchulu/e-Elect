@@ -43,9 +43,7 @@ async function createElection({
   }
 }
 
-
 //get all elections
-
 const getElections = async () => {
     try {
         const snapshot = await electionCollection.get();
