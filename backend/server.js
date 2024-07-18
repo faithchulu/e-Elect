@@ -26,11 +26,13 @@ app.use(
 const votingRoutes = require("./routes/votingRoutes");
 const tallyingRoutes = require("./routes/tallyingRoutes");
 const voterRoutes = require("./routes/voterRoutes");
+const partyRoutes = require("./routes/partyRoutes");
 
 // Use routes
 app.use("/api/voting", votingRoutes);
 app.use("/api/tallying", tallyingRoutes);
 app.use("/api/voter", voterRoutes);
+app.use("/api/party", partyRoutes)
 
 const PORT = 4000;
 
