@@ -51,4 +51,9 @@ router.get('/get-elections', async (req, res) => {
 });
 
 
+//get election by id
+
+//Open voting
+
+
 module.exports = router;

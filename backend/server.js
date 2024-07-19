@@ -30,6 +30,10 @@ const partyRoutes = require("./routes/partyRoutes");
 const electionRoutes = require("./routes/electionRoutes");
 const authRoutes = require("./routes/authRoutes");
 
+app.get("/", (req, res) => {
+  res.send("<h2>E-elect backend server up and running!</h2>");
+});
+
 // Use routes
 app.use("/api/voting", votingRoutes);
 app.use("/api/tallying", tallyingRoutes);
