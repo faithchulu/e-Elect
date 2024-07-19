@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 });
 
 // Use routes
-app.use("/api/voting", votingRoutes);
+app.use("/api/vote", votingRoutes);
 app.use("/api/tallying", tallyingRoutes);
 app.use("/api/voter", voterRoutes);
 app.use("/api/party", partyRoutes);

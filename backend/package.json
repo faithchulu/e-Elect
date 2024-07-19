@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "firebase": "^10.11.1",
     "firebase-admin": "^12.1.0",
+    "jshashes": "^1.0.8",
     "nodemon": "^3.1.0"
   },
   "devDependencies": {
