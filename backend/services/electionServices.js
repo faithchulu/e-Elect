@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const db = admin.firestore();
 const electionCollection = db.collection("elections");
+const partyService = require("./partyServices");
 
 // Function to create a party
 async function createElection({
@@ -107,9 +108,85 @@ const openVoting = async (id) => {
   }
 };
 
+// Function to close voting for an election
+const closeVoting = async (id) => {
+  try {
+    const electionRef = electionCollection.doc(id);
+    const doc = await electionRef.get();
+    if (!doc.exists) {
+      return { success: false, message: "Election not found" };
+    }
+
+    // Update election status to 'closed'
+    await electionRef.update({ status: "closed" });
+
+    return { success: true, message: "Election closed successfully" };
+  } catch (error) {
+    console.error("Error closing election:", error);
+    return { success: false, message: error.message };
+  }
+};
+
+const getElectionResults = async (electionId) => {
+  try {
+    const electionRef = electionCollection.doc(electionId);
+    const electionDoc = await electionRef.get();
+
+    if (!electionDoc.exists) {
+      return { success: false, message: "Election not found" };
+    }
+
+    const electionData = electionDoc.data();
+    const resultsCollection = electionRef.collection("results");
+    const resultsSnapshot = await resultsCollection.get();
+
+    const results = [];
+    const parties = [];
+    let totalVoteCount = 0;
+
+    // Fetch all parties data in parallel
+    const partyPromises = resultsSnapshot.docs.map(async (resultDoc) => {
+      const resultData = resultDoc.data();
+      const partyIdRef = resultData.partyId;
+
+      // Fetch party data
+      const partyResponse = await partyService.getPartyById(partyIdRef);
+
+      // Push results and party data
+      if (partyResponse.success) {
+        results.push({
+          partyId: partyResponse.data.id,
+          voteCount: resultData.voteCount,
+        });
+        parties.push(partyResponse.data);
+        totalVoteCount += resultData.voteCount;
+      }
+    });
+
+    // Wait for all party data to be fetched
+    await Promise.all(partyPromises);
+
+    return {
+      success: true,
+      data: {
+        electionId,
+        electionName: electionData.electionName,
+        parties,
+        results,
+        totalVoteCount,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting election results:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   createElection,
   getElections,
   getElectionById,
   openVoting,
+  closeVoting,
+  getElectionResults,
 };

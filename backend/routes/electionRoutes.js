@@ -74,4 +74,28 @@ router.post("/open-voting/:id", async (req, res) => {
   }
 });
 
+// POST route to close voting for an election
+router.post("/close-voting/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await electionService.closeVoting(id);
+
+  if (result.success) {
+    return res.status(200).json({ message: result.message });
+  } else {
+    return res.status(400).json({ message: result.message });
+  }
+});
+
+// GET route to view results of an election by ID
+router.get("/view-results/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await electionService.getElectionResults(id);
+
+  if (result.success) {
+    return res.status(200).json(result.data);
+  } else {
+    return res.status(404).json({ message: result.message });
+  }
+});
+
 module.exports = router;
