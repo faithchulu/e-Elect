@@ -34,4 +34,16 @@ router.get("/get-parties", async (req, res) => {
   }
 });
 
+// GET route to get a party by ID
+router.get("/get-party/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await partyService.getPartyById(id);
+
+  if (result.success) {
+    return res.status(200).json(result.data);
+  } else {
+    return res.status(404).json({ message: result.message });
+  }
+});
+
 module.exports = router;
