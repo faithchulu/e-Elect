@@ -39,6 +39,33 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// PUT route for updating an election by ID
+router.put("/update/:id", async (req, res) => {
+  try {
+    const electionId = req.params.id;
+    const updateData = req.body;
+
+    // Call the service to update the election
+    const result = await electionService.updateElectionById(
+      electionId,
+      updateData
+    );
+
+    if (result.success) {
+      res
+        .status(200)
+        .json({ message: "Election updated successfully", data: result.data });
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error updating election:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to update election", error: error.message });
+  }
+});
+
 //get all elections
 router.get("/get-elections", async (req, res) => {
   const result = await electionService.getElections();

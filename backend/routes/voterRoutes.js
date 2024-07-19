@@ -37,4 +37,42 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// GET route for fetching all voters
+router.get("/get-voters", async (req, res) => {
+  try {
+    const result = await voterService.getAllVoters();
+
+    if (result.success) {
+      res.status(200).json(result.data);
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error fetching voters:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch voters", error: error.message });
+  }
+});
+
+// DELETE route for deleting a voter by ID
+router.delete("/delete-voter/:id", async (req, res) => {
+  const voterId = req.params.id;
+
+  try {
+    const result = await voterService.deleteVoterById(voterId);
+
+    if (result.success) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error deleting voter:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to delete voter", error: error.message });
+  }
+});
+
 module.exports = router;

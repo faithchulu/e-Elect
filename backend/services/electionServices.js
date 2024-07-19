@@ -42,6 +42,28 @@ async function createElection({
   }
 }
 
+// Function to update an election by ID
+const updateElectionById = async (electionId, updateData) => {
+  try {
+    const electionRef = electionCollection.doc(electionId);
+    const electionDoc = await electionRef.get();
+
+    if (!electionDoc.exists) {
+      return { success: false, message: "Election not found" };
+    }
+
+    // Update the election document with new data
+    await electionRef.update(updateData);
+
+    // Fetch the updated election data
+    const updatedDoc = await electionRef.get();
+    return { success: true, data: updatedDoc.data() };
+  } catch (error) {
+    console.error("Error updating election:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 //get all elections
 const getElections = async () => {
   try {
@@ -81,6 +103,7 @@ const openVoting = async (id) => {
   try {
     const electionRef = electionCollection.doc(id);
     const doc = await electionRef.get();
+
     if (!doc.exists) {
       return { success: false, message: "Election not found" };
     }
@@ -99,9 +122,18 @@ const openVoting = async (id) => {
       batch.set(resultDocRef, { partyId, voteCount: 0 });
     });
 
+    // Create hashes subcollection with one document
+    const hashesCollection = electionRef.collection("hashes");
+    const hashDocRef = hashesCollection.doc(); // Auto-generated ID
+    batch.set(hashDocRef, { hashValue: "Hash creation default" });
+
+    // Commit all changes
     await batch.commit();
 
-    return { success: true, message: "Voting opened and results initialized" };
+    return {
+      success: true,
+      message: "Voting opened, results initialized, and hashes created",
+    };
   } catch (error) {
     console.error("Error opening voting:", error);
     return { success: false, message: error.message };
@@ -189,4 +221,5 @@ module.exports = {
   openVoting,
   closeVoting,
   getElectionResults,
+  updateElectionById,
 };
