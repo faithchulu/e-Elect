@@ -98,6 +98,28 @@ const getElectionById = async (id) => {
   }
 };
 
+const getActiveElections = async () => {
+  try {
+    const snapshot = await electionCollection
+      .where("status", "in", ["voting", "registration"])
+      .get();
+
+    if (snapshot.empty) {
+      return { success: true, data: [] };
+    }
+
+    const activeElections = [];
+    snapshot.forEach((doc) => {
+      activeElections.push({ id: doc.id, ...doc.data() });
+    });
+
+    return { success: true, data: activeElections };
+  } catch (error) {
+    console.error("Error getting active elections:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 // Function to open voting for an election
 const openVoting = async (id) => {
   try {
@@ -222,4 +244,5 @@ module.exports = {
   closeVoting,
   getElectionResults,
   updateElectionById,
+  getActiveElections,
 };

@@ -89,6 +89,16 @@ router.get("/get-election/:id", async (req, res) => {
   }
 });
 
+//Get active election staus == voting||registration
+router.get("/active-elections", async (req, res) => {
+  const result = await electionService.getActiveElections();
+  if (result.success) {
+    res.status(200).json(result.data);
+  } else {
+    res.status(500).json({ message: result.message });
+  }
+});
+
 // POST route to open voting for an election
 router.post("/open-voting/:id", async (req, res) => {
   const { id } = req.params;
