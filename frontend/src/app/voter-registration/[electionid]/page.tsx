@@ -14,7 +14,7 @@ const VoterRegistrationForm = () => {
     gender: string;
     nrcNumber: string;
     phoneNumber: string;
-    address: string;
+    residentialAddress: string;
     province: string;
     constituency: string;
   };
@@ -26,7 +26,7 @@ const VoterRegistrationForm = () => {
     gender: '',
     nrcNumber: '',
     phoneNumber: '',
-    address: '',
+    residentialAddress: '',
     province: '',
     constituency: '',
   });
@@ -153,12 +153,12 @@ const VoterRegistrationForm = () => {
             {currentStep === 3 && (
               <>
                 <div className="mb-4">
-                  <label htmlFor="address" className="block text-sm font-medium text-gray-700">Residential Address</label>
+                  <label htmlFor="residentialAddress" className="block text-sm font-medium text-gray-700">Residential Address</label>
                   <textarea
-                    id="address"
-                    name="address"
+                    id="residentialAddress"
+                    name="residentialAddress"
                     rows={3}
-                    value={formData.address}
+                    value={formData.residentialAddress}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
