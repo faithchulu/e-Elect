@@ -9,7 +9,6 @@ const getCandidatesByElectionId = async (electionId) => {
     if (!electionDoc.exists) {
       return { success: false, message: "Election not found" };
     }
-
     const electionData = electionDoc.data();
     const partyIds = electionData.parties;
 
