@@ -11,7 +11,6 @@ const getCandidatesByElectionId = async (electionId) => {
     }
     const electionData = electionDoc.data();
     const partyIds = electionData.parties;
-
     const partyDetailsPromises = partyIds.map(async (partyId) => {
       const response = await axios.get(`http://localhost:4000/api/party/get-party/${partyId}`);
       return response.data;
