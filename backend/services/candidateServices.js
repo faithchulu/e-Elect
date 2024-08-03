@@ -16,7 +16,6 @@ const getCandidatesByElectionId = async (electionId) => {
       return response.data;
     });
     const partyDetails = await Promise.all(partyDetailsPromises);
-
     return { success: true, candidates: partyDetails };
   } catch (error) {
     console.error("Error fetching candidates:", error);
