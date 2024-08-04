@@ -15,6 +15,7 @@ const getCandidatesByElectionId = async (electionId) => {
       const response = await axios.get(`http://localhost:4000/api/party/get-party/${partyId}`);
       return response.data;
     });
+    
     const partyDetails = await Promise.all(partyDetailsPromises);
     return { success: true, candidates: partyDetails };
   } catch (error) {
