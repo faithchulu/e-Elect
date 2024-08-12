@@ -105,8 +105,6 @@ const LandingPage = () => {
   }, []);
 
 
-  if (error) return <div>{error}</div>;
-
   const activeElections = elections.filter(
     (election) =>
       election.status === "registration" || election.status === "voting",

@@ -29,6 +29,7 @@ const voterRoutes = require("./routes/voterRoutes");
 const partyRoutes = require("./routes/partyRoutes");
 const electionRoutes = require("./routes/electionRoutes");
 const authRoutes = require("./routes/authRoutes");
+const candidateRoutes = require("./routes/candidateRoutes");
 
 app.get("/", (req, res) => {
   res.send("<h2>E-elect backend server up and running!</h2>");
@@ -41,6 +42,7 @@ app.use("/api/voter", voterRoutes);
 app.use("/api/party", partyRoutes);
 app.use("/api/election", electionRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/candidate", candidateRoutes);
 
 const PORT = 4000;
 

@@ -1,5 +1,5 @@
 "use client";
-
+import '@passageidentity/passage-auth'
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 import { useState, useEffect } from "react";
 import { FingerPrintIcon } from "@heroicons/react/24/outline";

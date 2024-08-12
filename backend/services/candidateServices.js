@@ -1,5 +1,6 @@
-const axios = require('axios');
-const { db } = require('./firebaseAdmin');
+const admin = require("firebase-admin");
+const db = admin.firestore();
+const partyServices = require("./partyServices")
 
 const getCandidatesByElectionId = async (electionId) => {
   try {
@@ -14,7 +15,7 @@ const getCandidatesByElectionId = async (electionId) => {
     const partyIds = electionData.parties;
     
     const partyDetailsPromises = partyIds.map(async (partyId) => {
-      const response = await axios.get(`http://localhost:4000/api/party/get-party/${partyId}`);
+      const response = await partyServices.getPartyById(partyId);
       return response.data;
     });
 
