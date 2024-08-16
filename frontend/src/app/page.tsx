@@ -13,7 +13,6 @@ import Logo from "../../public/images/logo/e-Elect-Logo.png";
 import HomeBG from "../../public/images/backgrounds/zambia_flag.png";
 
 
-
 interface Election {
   id: string;
   electionName: string;
