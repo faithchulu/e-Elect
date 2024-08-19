@@ -14,7 +14,6 @@ import HomeBG from "../../public/images/backgrounds/zambia_flag.png";
 
 
 
-
 interface Election {
   id: string;
   electionName: string;
