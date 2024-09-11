@@ -46,4 +46,25 @@ router.get("/get-party/:id", async (req, res) => {
   }
 });
 
+// Route to get parties by election ID
+router.get('/get-parties-by-election/:electionId', async (req, res) => {
+  const { electionId } = req.params;
+
+  try {
+    // Call the service function to get the parties
+    const parties = await partyService.getPartiesByElectionId(electionId);
+
+    // Send the response with the parties data
+    res.status(200).json({
+      success: true,
+      data: parties,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 module.exports = router;
