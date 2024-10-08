@@ -3,7 +3,7 @@ const db = admin.firestore();
 const electionCollection = db.collection("elections");
 const partyService = require("./partyServices");
 
-// Function to create a party
+// Function to create an election
 async function createElection({
   electionName,
   electionDescription,
