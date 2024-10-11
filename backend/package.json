@@ -7,7 +7,7 @@
     "test": "start",
     "start": "nodemon server.js"
   },
-  "keywords": [],
+  "keywords": ["Blockchain", "Voting System", "Transparency", "Security","Decentralization"],
   "author": "Faith Chulu",
   "license": "ISC",
   "dependencies": {
