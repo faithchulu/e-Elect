@@ -2,7 +2,6 @@ const {Web3} = require('web3');
 const admin = require("firebase-admin");
 const jsHashes = require("jshashes");
 const VotingArtifact = require("../blockchain/build/contracts/Voting.json"); 
-
 const db = admin.firestore();
 const electionCollection = db.collection("elections");
 
@@ -54,6 +53,7 @@ const getVoteCount = async (partyId) => {
     return { success: false, message: error.message };
   }
 };
+
 
 module.exports = {
   castVote,
