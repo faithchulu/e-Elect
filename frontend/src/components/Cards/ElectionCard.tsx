@@ -30,10 +30,11 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
           <PencilIcon className="h-5 w-5" />
         </button>
       </div>
-      <p className="mt-2"><strong>Political Party:</strong> {decsription}</p>
+      <p className="mt-2"><strong>Description:</strong> {decsription}</p>
       <p className="mt-1"><strong>Number of Candidates:</strong> {noOfCandidates}</p>
-      <p className="mt-2"><strong>Voting Starts:</strong> {new Date(votingStartDate).toLocaleString()}</p>
-      <p className="mt-1"><strong>Voting Ends:</strong> {new Date(votingEndDate).toLocaleString()}</p>
+      <p className="mt-2"><strong>Voting Starts:</strong> {new Date(votingStartDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+      <p className="mt-1"><strong>Voting Ends:</strong> {new Date(votingEndDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+
       <button
         onClick={onOpenVoting}
         className="mt-4 bg-meta-4 text-white px-4 py-2 rounded hover:bg-slate-500"

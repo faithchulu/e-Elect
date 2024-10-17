@@ -1,48 +1,36 @@
-"use client"
+"use client";
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ElectionCard from '@/components/Cards/ElectionCard'; // Adjust the import path as necessary
-import { BASE_URL } from '@/config/index';
+import BASE_URL from "@/config/index";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-const edata = [ {
-  id : 1,
-  name : "Election Name",
-  decsription : "Party A",
-  noOfCandidates : "5",
-  votingStartDate : "03/04/2022",
-  votingEndDate   : " 04/05/2022",
-}
-]
-
 const ActiveElections = () => {
   const [elections, setElections] = useState([]);
-  
 
   useEffect(() => {
     const fetchElections = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/elections/active`);
-        setElections(response.data);
+        
+        const response = await axios.get(`http://localhost:4000/api/election/active-elections`);
+        setElections(response.data);  // Set fetched elections to state
       } catch (error) {
         console.error("Error fetching elections:", error);
       }
     };
 
-    
-    setElections(edata);
+    // Call fetchElections inside useEffect
+    fetchElections();
   }, []);
 
   const handleEdit = (id) => {
-    // Navigate to edit election page
-    // For example: router.push(`/admin/edit-election/${id}`);
+    // Navigate to edit election page or implement logic
   };
 
   const handleOpenVoting = (id) => {
-    // Navigate to open voting page or perform the action to open voting
-    // For example: router.push(`/voting/${id}`);
+    // Navigate to open voting page or implement logic
   };
 
   return (
@@ -57,14 +45,22 @@ const ActiveElections = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {elections.length > 0 ? (
-            edata.map((election) => (
+            elections.map((election) => (
               <ElectionCard
                 key={election.id}
                 electionName={election.name}
-                decsription={election.decsription}
+                description={election.description}  
                 noOfCandidates={election.noOfCandidates}
-                votingStartDate={election.votingStartDate}
-                votingEndDate={election.votingEndDate}
+                votingStartDate={new Date(election.votingStartDate).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}  
+                votingEndDate={new Date(election.votingEndDate).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
                 onEdit={() => handleEdit(election.id)}
                 onOpenVoting={() => handleOpenVoting(election.id)}
               />
