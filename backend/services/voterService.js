@@ -88,8 +88,34 @@ const deleteVoterById = async (voterId) => {
   }
 };
 
+// Function to get voter by NRC number
+const getVoterByNRC = async (nrcNumber) => {
+  try {
+    const snapshot = await votersCollection.where("nrcNumber", "==", nrcNumber).get();
+
+    if (snapshot.empty) {
+      return { success: false, message: "Voter not found" };
+    }
+
+    const voter = [];
+    snapshot.forEach((doc) => {
+      voter.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    return { success: true, data: voter[0] }; // Return the first matching voter
+  } catch (error) {
+    console.error("Error fetching voter by NRC:", error);
+    return { success: false, message: error.message };
+  }
+};
+
+
 module.exports = {
   registerVoter,
   getAllVoters,
   deleteVoterById,
+  getVoterByNRC,
 };

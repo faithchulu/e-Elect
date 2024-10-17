@@ -75,4 +75,25 @@ router.delete("/delete-voter/:id", async (req, res) => {
   }
 });
 
+// GET route for fetching a voter by NRC number
+router.get("/get-voter/:nrcNumber", async (req, res) => {
+  const { nrcNumber } = req.params;
+
+  try {
+    const result = await voterService.getVoterByNRC(nrcNumber);
+
+    if (result.success) {
+      res.status(200).json(result.data);
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error fetching voter by NRC:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch voter", error: error.message });
+  }
+});
+
+
 module.exports = router;
