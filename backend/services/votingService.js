@@ -54,7 +54,6 @@ const getVoteCount = async (partyId) => {
   }
 };
 
-
 module.exports = {
   castVote,
   getVoteCount,
