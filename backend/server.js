@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const { db } = require("./firebaseAdmin");
 
 
-
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
