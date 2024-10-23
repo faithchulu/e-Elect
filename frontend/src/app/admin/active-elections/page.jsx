@@ -47,6 +47,7 @@ const ActiveElections = () => {
           {elections.length > 0 ? (
             elections.map((election) => (
               <ElectionCard
+                
                 key={election.id}
                 electionName={election.name}
                 description={election.description}  

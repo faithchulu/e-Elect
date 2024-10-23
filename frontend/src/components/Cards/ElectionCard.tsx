@@ -23,7 +23,7 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
   onOpenVoting,
 }) => {
   return (
-    <div className="border rounded-lg p-4 shadow-md">
+    <div className="border rounded-lg p-4 shadow-md bg-green-100">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">{electionName}</h2>
         <button onClick={onEdit} className="text-green-600 hover:text-green-800">
