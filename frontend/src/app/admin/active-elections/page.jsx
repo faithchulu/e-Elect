@@ -38,7 +38,7 @@ const ActiveElections = () => {
       <div className="container mx-auto p-4">
         <div className='flex justify-between'>
           <h2 className="text-2xl font-bold mb-4">Active Elections</h2>
-          <Link href="/admin/active-elections/create-election" className="flex bg-meta-4 rounded-md shadow-lg px-2 py-1.5 text-white">
+          <Link href="/admin/active-elections/create-election" className="flex bg-meta-4 rounded-md mb-2 shadow-lg px-2 py-1.5 text-white">
             <PlusCircleIcon className='h-6 w-6'/>
             New Election
           </Link>
@@ -49,25 +49,27 @@ const ActiveElections = () => {
               <ElectionCard
                 
                 key={election.id}
-                electionName={election.name}
-                description={election.description}  
-                noOfCandidates={election.noOfCandidates}
-                votingStartDate={new Date(election.votingStartDate).toLocaleDateString('en-US', {
+                electionId = {election.id}
+                electionName={election.electionName}
+                description={election.electionDescription}  
+                noOfCandidates={election.parties.length}
+                votingStartDate={new Date(election.startDate).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric'
                 })}  
-                votingEndDate={new Date(election.votingEndDate).toLocaleDateString('en-US', {
+                votingEndDate={new Date(election.endDate).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric'
                 })}
+                status={election.status}
                 onEdit={() => handleEdit(election.id)}
                 onOpenVoting={() => handleOpenVoting(election.id)}
               />
             ))
           ) : (
-            <p>No active elections to show.</p>
+            <p>Loading...</p>
           )}
         </div>
       </div>

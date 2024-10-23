@@ -4,54 +4,43 @@ import Link from 'next/link';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import { type } from 'os';
 
 const questionsList = [
   "Enter the Election Name",
   "Enter the Election Description",
+  "Select the election type",
   "Voting Start Date",
   "Voting End Date",
   "Select Participating parties"
 ];
 
-const parties = [
-  {
-    "id" : "1",
-    "partyName" : "PartyA",
-  },
-  {
-    "id" : "2",
-    "partyName" : "PartyB",
-  },
-  {
-    "id" : "3",
-    "partyName" : "Party4",
-  },
-]
-
 const CreateElection = () => {
   const [step, setStep] = useState(0);
   const [electionName, setElectionName] = useState("");
   const [electionDescription, setElectionDescription] = useState("");
+  const [electionType, setElectionType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [participatingParties, setParticipatingParties] = useState([]);
-  // const [parties, setParties] = useState([]);
+  const [parties, setParties] = useState([]);
 
 
 
-  // useEffect(() => {
-  //   // Fetch parties from the database
-  //   const fetchParties = async () => {
-  //     try {
-  //       const response = await axios.get('/api/parties'); // Adjust the endpoint as necessary
-  //       setParties(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching parties:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    // Fetch parties from the database
+    const fetchParties = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/party/get-parties'); 
+        setParties(response.data)
+        console.log(response.data)
+      } catch (error) {
+        console.error('Error fetching parties:', error);
+      }
+    };
 
-  //   fetchParties();
-  // }, []);
+    fetchParties();
+  }, []);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -75,14 +64,19 @@ const CreateElection = () => {
     const electionData = {
       electionName,
       electionDescription,
+      "type": electionType,
       startDate,
       endDate,
-      participatingParties
+      parties: participatingParties,
+      status : "registration"
     };
 
+    console.log(electionData)
+
     try {
-      await axios.post('/api/elections', electionData); // Adjust the endpoint as necessary
+      await axios.post('http://localhost:4000/api/election/create', electionData); // Adjust the endpoint as necessary
       alert('Election created successfully!');
+      window.location.href = "/admin/active-elections"
     } catch (error) {
       console.error('Error creating election:', error);
     }
@@ -134,6 +128,33 @@ const CreateElection = () => {
         return (
           <div className="bg-black  font-bold p-5 rounded-md py-30 w-3/4">
             <div className='flex flex-col items-center'> 
+              <label htmlFor="electionType" className="text-white text-xl mb-4">
+                {questionsList[step]}
+              </label>
+              <select
+                type="text"
+                id="electionType"
+                className='mb-2'
+                value={electionType}
+                required
+                onChange={(e) => setElectionType(e.target.value)}
+              >
+                    <option value="">Select Type</option>
+                    <option value="Presidential">Presidential</option>
+                    <option value="Local Government">Local Government</option>
+                    <option value="Parliamentary">Parliamentary</option>
+              </select>
+              <div className='flex mt-6'>
+                <button className="p-2 border border-green-500 text-white rounded-md mr-4" onClick={prevStep}>Previous</button>
+                <button className="p-2 rounded-md bg-green-500 text-white" onClick={nextStep}>Next</button>
+              </div>
+              </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="bg-black  font-bold p-5 rounded-md py-30 w-3/4">
+            <div className='flex flex-col items-center'> 
               <label htmlFor="startDate" className="text-white text-2xl mb-2">
                 {questionsList[step]}
               </label>
@@ -151,7 +172,7 @@ const CreateElection = () => {
             </div>
           </div>
         );
-      case 3:
+      case 4:
         return (
           <div className="bg-black font-bold p-5 rounded-md py-30 w-3/4">
             <div className='flex flex-col items-center'> 
@@ -172,31 +193,31 @@ const CreateElection = () => {
             </div>
           </div>
         );
-      case 4:
-        return (
-          <div className="bg-black font-bold p-5 rounded-md py-30 w-3/4">
-            <div className='flex flex-col items-center'> 
-              <label htmlFor="parties" className="text-white text-2xl mb-2">
-                {questionsList[step]}
-              </label>
-              {parties.map((party) => (
-                <div key={party.id} className="mb-2">
-                  <input
-                    type="checkbox"
-                    id={party.id}
-                    checked={participatingParties.includes(party.id)}
-                    onChange={() => handlePartyChange(party.id)}
-                  />
-                  <label htmlFor={party.id} className="text-white ml-2">{party.partyName}</label>
+        case 5:
+          return (
+            <div className="bg-black font-bold p-5 rounded-md py-30 w-3/4">
+              <div className='flex flex-col items-center'> 
+                <label htmlFor="parties" className="text-white text-2xl mb-2">
+                  {questionsList[step]}
+                </label>
+                {parties.map((party) => (
+                  <div key={party.id} className="mb-2">
+                    <input
+                      type="checkbox"
+                      id={party.id}
+                      checked={participatingParties.includes(party.id)}
+                      onChange={() => handlePartyChange(party.id)}
+                    />
+                    <label htmlFor={party.id} className="text-white ml-2">{party.partyName}</label>
+                  </div>
+                ))}
+                <div className='flex mt-6'>
+                  <button className="p-2 border border-green-500 text-white rounded-md mr-4" onClick={prevStep}>Previous</button>
+                  <button className="p-2 rounded-md bg-green-500 text-white" onClick={handleSubmit}>Submit</button>
                 </div>
-              ))}
-              <div className='flex mt-6'>
-                <button className="p-2 border border-green-500 text-white rounded-md mr-4" onClick={prevStep}>Previous</button>
-                <button className="p-2 rounded-md bg-green-500 text-white" onClick={handleSubmit}>Submit</button>
               </div>
             </div>
-          </div>
-        );
+          );
       default:
         return null;
     }
