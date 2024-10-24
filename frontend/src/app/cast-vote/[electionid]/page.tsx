@@ -1,47 +1,43 @@
 "use client"
 import Image from "next/image";
-import Candidateone from "../../../../public/images/candidates/candidate1.jpg"
-import Candidatetwo from "../../../../public/images/candidates/candidate2.jpg"
-import Candidatethree from "../../../../public/images/candidates/CandidateThree.jpg"
-import Candidatefour from "../../../../public/images/candidates/CandidateFour.jpg"
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Candidateone from "../../../../public/images/candidates/HH.jpeg";
+import Candidatetwo from "../../../../public/images/candidates/Nawakwi.jpeg";
+import Candidatethree from "../../../../public/images/candidates/RB.jpeg";
+import Candidatefour from "../../../../public/images/candidates/Ireen.jpeg";
+import Candidatefive from "../../../../public/images/candidates/Sata.jpeg";
+import { useParams } from 'next/navigation';
+import { Party } from '@/types/party';
 
-const candidates = [
-  {
-    id: "1",
-    name: 'John Doe',
-    party: 'Unity Party',
-    slogan: 'Together we thrive',
-    image: Candidateone, 
-  },
-  {
-    id: "2",
-    name: 'Jane Smith',
-    party: 'Progressive Alliance',
-    slogan: 'Moving forward, together',
-    image: Candidatetwo, 
-  },
-  {
-  id: "3",
-  name: 'John Doe',
-  party: 'Unity Party',
-  slogan: 'Together we thrive',
-  image: Candidatethree, 
-},
-{
-  id: "4",
-  name: 'Jane Smith',
-  party: 'Progressive Alliance',
-  slogan: 'Moving forward, together',
-  image: Candidatefour, 
-},
-  // Add more candidate objects as needed
-];
+const CastVoteScreen = () => {
+  const [candidates, setCandidates] = useState<Party[]>([]);
+  const { electionid } = useParams();
 
-const CastVoteScreen = ({params}:{params :{candidateId : string}}) => {
-  const handleVoteClick = (candidateId : string ) => {
-    // Implement logic to handle voting for the candidate with the given ID
+  // Array of candidate images to be used
+  const candidateImages = [Candidateone, Candidatetwo, Candidatethree, Candidatefour, Candidatefive];
+
+  useEffect(() => {
+    if (!electionid) return; // Prevent API call if electionId is not defined
+
+    const fetchParties = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/party/get-parties-by-election/${electionid}`);
+        console.log("API Response:", response.data);
+        
+        // Adjust this based on the actual response structure
+        setCandidates(response.data.data); 
+      } catch (error) {
+        console.error("Error fetching parties:", error);
+      }
+    };
+
+    fetchParties();
+  }, [electionid]);
+
+  const handleVoteClick = (candidateId: string) => {
     console.log(`Vote casted for candidate with ID ${candidateId}`);
   };
 
@@ -50,17 +46,24 @@ const CastVoteScreen = ({params}:{params :{candidateId : string}}) => {
       <HorizontalNav />
       <h1 className="text-2xl font-semibold text-black mb-4">Cast Your Vote</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {candidates.map((candidate) => (
+        {candidates.map((candidate, index) => (
           <div key={candidate.id} className="bg-white rounded-md shadow-md flex items-center border border-blue-700">
             <div className="flex-none w-24 h-24 rounded-l-md overflow-hidden">
-              <Image src={candidate.image} alt={candidate.name} className="w-auto h-fill object-cover" />
+              {/* Cycle through candidate images using the modulus operator */}
+              <Image 
+                src={candidateImages[index % candidateImages.length]} 
+                alt={candidate.candidate} 
+                width={96} 
+                height={96} 
+                className="w-auto h-fill object-cover" 
+              />
             </div>
             <div className="flex-auto flex flex-col justify-center p-4 bg-green-700 ">
-              <h2 className="text-lg text-white font-semibold">{candidate.name}</h2>
-              <p className="text-white">{candidate.party}</p>
+              <h2 className="text-lg text-white font-semibold">{candidate.candidate}</h2>
+              <p className="text-white">{candidate.partyName}</p>
               <p className="mt-2 text-white">{candidate.slogan}</p>
               <Link
-              href="voter-auth/id"
+                href={`voter-auth/${electionid}/${candidate.id}`}
                 className="flex-none bg-white text-black py-2 px-4 mt-2 rounded-md hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 onClick={() => handleVoteClick(candidate.id)}
               >

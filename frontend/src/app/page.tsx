@@ -123,7 +123,7 @@ const LandingPage = () => {
           objectFit="cover"
           quality={100}
         />
-        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
       </div>
       <div className="relative z-10 min-h-screen py-24">
         <HorizontalNav />
