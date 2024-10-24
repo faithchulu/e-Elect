@@ -44,7 +44,6 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
           <PencilIcon className="h-5 w-5" />
         </button>
       </div>
-      <p className="mt-2">Name: <strong>{electionName}</strong></p>
       <p className="mt-2">Description: <strong>{decsription}</strong></p>
       <p className="mt-1">Number of Candidates: <strong>{noOfCandidates}</strong></p>
       <p className="mt-1">Status: <strong>{status}</strong></p>

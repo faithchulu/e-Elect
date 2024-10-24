@@ -60,15 +60,14 @@ const ElectionResultsPage = () => {
     <DefaultLayout>
       <div className="px-4 py-20">
       <div className='flex justify-between'>
-        <h1 className="text-3xl font-bold text-slate-700 mb-4">{election.electionName}</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-4">{election.electionName} Results</h1>
         <Link href="/admin/active-elections" className="flex bg-meta-4 rounded-md mb-2 shadow-lg px-2 py-1.5 text-white">
           <ArrowLeftEndOnRectangleIcon className='h-6 w-6'/>
           Back to active elections
         </Link>
       </div>
-        <h1 className="text-2xl text-black font-semibold mb-4">{election.electionName} Results</h1>
         
-        {election.status === 'voting' ? (
+        {election.status === 'voting' || 'closed' ? (
           <div className="bg-white rounded-lg shadow-lg p-6">
             {results.map((result, index) => {
               const party = parties.find((p) => p.id === result.partyId)
@@ -97,7 +96,7 @@ const ElectionResultsPage = () => {
           </div>
         ) : (
           <div className="text-lg font-semibold">
-            Voting is not yet closed. Results will be available after the voting period ends.
+           Election still in registration phase. Results will be available after the voting period begins.
           </div>
         )}
       </div>

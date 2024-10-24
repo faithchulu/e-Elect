@@ -2,6 +2,7 @@ import React from 'react';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import Link from 'next/link';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 interface ElectionCardProps {
   electionId: string;
@@ -37,35 +38,26 @@ const HistoricalElectionCard: React.FC<ElectionCardProps> = ({
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow-md bg-green-100">
+    <div className="border rounded-lg p-4 shadow-md bg-indigo-200">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">{electionName}</h2>
-        <button onClick={onEdit} className="text-green-600 hover:text-green-800">
-          <PencilIcon className="h-5 w-5" />
+        <h2 className="text-xl text-slate-800 font-bold">{electionName}</h2>
+        <button onClick={onEdit} className="text-meta-1 hover:text-green-800">
+          <TrashIcon className="h-5 w-5" />
         </button>
       </div>
-      <p className="mt-2">Name: <strong>{electionName}</strong></p>
       <p className="mt-2">Description: <strong>{decsription}</strong></p>
       <p className="mt-1">Number of Candidates: <strong>{noOfCandidates}</strong></p>
       <p className="mt-1">Status: <strong>{status}</strong></p>
       <p className="mt-1">Start: <strong>{new Date(votingStartDate).toLocaleString()}</strong></p>
       <p className="mt-1 mb-6">Close: <strong>{new Date(votingEndDate).toLocaleString()}</strong></p>
 
-      {status === "registration" ? (
-        <button
-          onClick={handleOpenVoting}
-          className="bg-meta-4 text-white px-4 py-2 rounded hover:bg-slate-500"
-        >
-          Open Voting
-        </button>
-      ) : status === "closed" ? (
         <Link
           href={`/admin/active-elections/details/${electionId}`}
-          className="bg-green-700 text-white px-4 py-2.5 rounded hover:bg-slate-500"
+          className="bg-slate-900 text-white px-4 py-2.5 rounded hover:bg-slate-500"
         >
           View Details
         </Link>
-      ) : null}
+      
     </div>
   );
 };

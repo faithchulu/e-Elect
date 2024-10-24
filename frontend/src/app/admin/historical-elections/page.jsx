@@ -14,7 +14,7 @@ const HistoricalElections = () => {
     const fetchElections = async () => {
       try {
         
-        const response = await axios.get(`http://localhost:4000/api/election/get-elections`);
+        const response = await axios.get(`http://localhost:4000/api/election/closed-elections`);
         setElections(response.data);  // Set fetched elections to state
       } catch (error) {
         console.error("Error fetching elections:", error);
