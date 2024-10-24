@@ -5,6 +5,8 @@ import axios from 'axios'
 import { useParams } from 'next/navigation'
 import { Election } from '@/types/election'
 import { Party } from '@/types/party'
+import Link from 'next/link'
+import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline'
 
 const ElectionResultsPage = () => {
   const [election, setElection] = useState<Election | null>(null)
@@ -57,7 +59,13 @@ const ElectionResultsPage = () => {
   return (
     <DefaultLayout>
       <div className="px-4 py-20">
-        
+      <div className='flex justify-between'>
+        <h1 className="text-3xl font-bold text-slate-700 mb-4">{election.electionName}</h1>
+        <Link href="/admin/active-elections" className="flex bg-meta-4 rounded-md mb-2 shadow-lg px-2 py-1.5 text-white">
+          <ArrowLeftEndOnRectangleIcon className='h-6 w-6'/>
+          Back to active elections
+        </Link>
+      </div>
         <h1 className="text-2xl text-black font-semibold mb-4">{election.electionName} Results</h1>
         
         {election.status === 'voting' ? (
