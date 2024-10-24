@@ -236,6 +236,28 @@ const getElectionResults = async (electionId) => {
   }
 };
 
+const getClosedElections = async () => {
+  try {
+    const snapshot = await electionCollection
+      .where("status", "in", ["closed"])
+      .get();
+
+    if (snapshot.empty) {
+      return { success: true, data: [] };
+    }
+
+    const activeElections = [];
+    snapshot.forEach((doc) => {
+      activeElections.push({ id: doc.id, ...doc.data() });
+    });
+
+    return { success: true, data: activeElections };
+  } catch (error) {
+    console.error("Error getting closed elections:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 module.exports = {
   createElection,
   getElections,
@@ -245,4 +267,5 @@ module.exports = {
   getElectionResults,
   updateElectionById,
   getActiveElections,
+  getClosedElections
 };

@@ -1,22 +1,11 @@
-"use client"
+"use client";
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import HistoricalElectionCard from '@/components/Cards/HistoricalElectionCard'; // Adjust the import path as necessary
-import { BASE_URL } from '@/config/index';
-import ElectionCard from '@/components/Cards/ElectionCard';
-
-const edata = [ {
-  id : 1,
-  name : "Test",
-  politicalParty : "Party A",
-  partySlogan : "Slogan a",
-  candidateName : "candidateName",
-  candidateImage : " election.candidateImage ",
-  votingStartDate : "03/04/2022",
-  votingEndDate   : " 04/05/2022",
-}
-]
+import HistoricalElectionCard from '@/components/Cards/HistoricalElectionCard'; 
+import BASE_URL from "@/config/index";
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 const HistoricalElections = () => {
   const [elections, setElections] = useState([]);
@@ -24,47 +13,60 @@ const HistoricalElections = () => {
   useEffect(() => {
     const fetchElections = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/elections/historical`);
-        setElections(response.data);
+        
+        const response = await axios.get(`http://localhost:4000/api/election/get-elections`);
+        setElections(response.data);  // Set fetched elections to state
       } catch (error) {
         console.error("Error fetching elections:", error);
       }
     };
 
+    // Call fetchElections inside useEffect
     fetchElections();
   }, []);
 
   const handleEdit = (id) => {
-    // Navigate to edit election page
-    // For example: router.push(`/admin/edit-election/${id}`);
+    // Navigate to edit election page or implement logic
   };
 
   const handleOpenVoting = (id) => {
-    // Navigate to open voting page or perform the action to open voting
-    // For example: router.push(`/voting/${id}`);
+    // Navigate to open voting page or implement logic
   };
 
   return (
     <DefaultLayout>
       <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">Historical Elections</h2>
+        <div className='flex justify-between'>
+          <h2 className="text-2xl font-bold text-slate-700 mb-4">Historical Elections</h2>
+          
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {edata.length > 0 ? (
-            edata.map((election) => (
+          {elections.length > 0 ? (
+            elections.map((election) => (
               <HistoricalElectionCard
+                
                 key={election.id}
-                electionName={election.name}
-                politicalParty={election.politicalParty}
-                partySlogan={election.partySlogan}
-                candidateName={election.candidateName}
-                candidateImage={election.candidateImage}
-                votingStartDate={election.votingStartDate}
-                votingEndDate={election.votingEndDate}
-                resultLink={`/elections/results/${election.id}`} // Adjust the link as necessary
+                electionId = {election.id}
+                electionName={election.electionName}
+                description={election.electionDescription}  
+                noOfCandidates={election.parties.length}
+                votingStartDate={new Date(election.startDate).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}  
+                votingEndDate={new Date(election.endDate).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+                status={election.status}
+                onEdit={() => handleEdit(election.id)}
+                onOpenVoting={() => handleOpenVoting(election.id)}
               />
             ))
           ) : (
-            <p>No historical elections to show.</p>
+            <p>Loading...</p>
           )}
         </div>
       </div>

@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const electionService = require("../services/electionServices");
 
-const status = "registration";
-
 // POST route for party creation
 router.post("/create", async (req, res) => {
   try {
@@ -132,6 +130,17 @@ router.get("/view-results/:id", async (req, res) => {
     return res.status(200).json(result.data);
   } else {
     return res.status(404).json({ message: result.message });
+  }
+});
+
+
+//Get closed election staus == closed
+router.get("/closed-elections", async (req, res) => {
+  const result = await electionService.getClosedElections();
+  if (result.success) {
+    res.status(200).json(result.data);
+  } else {
+    res.status(500).json({ message: result.message });
   }
 });
 
