@@ -4,7 +4,6 @@ import Link from 'next/link';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import { type } from 'os';
 
 const questionsList = [
   "Enter the Election Name",

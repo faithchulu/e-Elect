@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Party } from "@/types/party"; // Import the Party type
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
+import Link from "next/link";
 
 const PartyTable = () => {
   const [parties, setParties] = useState<Party[]>([]);
@@ -40,9 +41,15 @@ const PartyTable = () => {
 
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="px-4 py-6 md:px-6 xl:px-7.5">
-        <h4 className="text-xl font-semibold text-black dark:text-white">Registered Parties</h4>
-      </div>
+      <div className='flex justify-between'>
+          <div className="px-4 py-6 md:px-6 xl:px-7.5">
+            <h4 className="text-xl font-semibold text-black dark:text-white">Registered Parties</h4>
+          </div>
+          <Link href="/admin/political-parties/create-party" className="flex bg-meta-4 rounded-md mt-4 mb-4 mr-4 shadow-lg px-2 py-1.5 text-white">
+            <PlusCircleIcon className='h-6 w-6'/>
+            New Party
+          </Link>
+        </div>
 
       {/* Table Headers */}
       <div className="grid grid-cols-9 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
