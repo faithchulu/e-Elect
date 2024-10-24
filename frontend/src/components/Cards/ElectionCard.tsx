@@ -37,10 +37,10 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow-md bg-green-100">
+    <div className="border rounded-lg p-4 shadow-md bg-indigo-200">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">{electionName}</h2>
-        <button onClick={onEdit} className="text-green-600 hover:text-green-800">
+        <h2 className="text-xl font-bold text-slate-800">{electionName}</h2>
+        <button onClick={onEdit} className="text-blue-800 hover:text-blue-600">
           <PencilIcon className="h-5 w-5" />
         </button>
       </div>
@@ -53,7 +53,7 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
       {status === "registration" ? (
         <button
           onClick={handleOpenVoting}
-          className="bg-meta-4 text-white px-4 py-2 rounded hover:bg-slate-500"
+          className="bg-meta-4 text-white px-4 py-2 rounded hover:bg-slate-600"
         >
           Open Voting
         </button>
