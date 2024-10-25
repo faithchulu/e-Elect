@@ -1,21 +1,32 @@
 const admin = require("firebase-admin");
 const db = admin.firestore();
+const crypto = require('crypto'); // Import the crypto module
 const partyCollection = db.collection("parties");
+
+// Function to generate a random uint256 ID
+function generateUint256Id() {
+  const randomBytes = crypto.randomBytes(32); // Generate 32 random bytes
+  return `0x${randomBytes.toString('hex')}`; // Convert to hexadecimal string with 0x prefix
+}
 
 // Function to create a party
 async function createParty({ partyName, slogan, candidate }) {
   try {
-    // Store party data in firestore
-    const partyRef = db.collection("parties").doc();
+    // Generate uint256 ID for the party
+    const partyId = generateUint256Id();
+
+    // Store party data in Firestore with the generated partyId
+    const partyRef = partyCollection.doc(partyId); // Use partyId as the document ID
     await partyRef.set({
+      id: partyId, // Store the generated uint256 ID
       partyName,
       slogan,
       candidate,
     });
 
-    // Return registered voter details including ID
+    // Return registered party details including ID
     return {
-      id: partyRef.id,
+      id: partyId,
       partyName,
       slogan,
       candidate,
@@ -25,7 +36,7 @@ async function createParty({ partyName, slogan, candidate }) {
   }
 }
 
-//get all parties
+// Get all parties function remains unchanged
 const getParties = async () => {
   try {
     const snapshot = await partyCollection.get();
@@ -58,36 +69,33 @@ const getPartyById = async (id) => {
     return { success: false, message: error.message };
   }
 };
-// Service function to get parties by election ID
+
+// Service function to get parties by election ID remains unchanged
 const getPartiesByElectionId = async (electionId) => {
   try {
-    // Step 1: Get the election document by electionId
     const electionDoc = await db.collection("elections").doc(electionId).get();
 
     if (!electionDoc.exists) {
       throw new Error("Election not found");
     }
 
-    // Step 2: Extract party IDs from the election document
     const electionData = electionDoc.data();
     const partyIds = electionData.parties || [];
 
-    // Step 3: Fetch party details for each party ID
     const partyPromises = partyIds.map((partyId) => {
       return db.collection("parties").doc(partyId).get();
     });
 
     const partySnapshots = await Promise.all(partyPromises);
 
-    // Step 4: Format the party details into a response object
     const parties = partySnapshots
       .map((partySnap) => {
         if (partySnap.exists) {
           return { id: partySnap.id, ...partySnap.data() };
         }
-        return null; // Return null if a party document doesn't exist
+        return null;
       })
-      .filter(Boolean); // Remove null entries
+      .filter(Boolean);
 
     return parties;
   } catch (error) {

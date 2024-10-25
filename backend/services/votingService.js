@@ -1,4 +1,4 @@
-const {Web3} = require('web3');
+const { Web3 } = require('web3');
 const admin = require("firebase-admin");
 const jsHashes = require("jshashes");
 const VotingArtifact = require("../blockchain/build/contracts/Voting.json"); 
@@ -7,7 +7,7 @@ const electionCollection = db.collection("elections");
 
 // Initialize Web3 and set the provider (e.g., Ganache or your network)
 const web3 = new Web3("http://127.0.0.1:7545"); 
-const contractAddress = "0xfA977D06Deb4A017147d3Fa915489d4C150D5654"; // Replace with your contract address
+const contractAddress = "0xfA977D06Deb4A017147d3Fa915489d4C150D5654";
 const votingContract = new web3.eth.Contract(VotingArtifact.abi, contractAddress);
 
 // Service function to cast vote
@@ -20,13 +20,27 @@ const castVote = async (electionId, partyId, nrcNumber, voterAddress) => {
       return { success: false, message: "Election not found" };
     }
 
+    console.log("Voter Address:", voterAddress);
+
     // Create transaction to cast the vote
     const transaction = await votingContract.methods.vote(partyId).send({ from: voterAddress });
 
-    // Check transaction receipt for confirmation
     if (!transaction.status) {
       return { success: false, message: "Transaction failed" };
     }
+
+    // Query the results subcollection to find the document with the matching partId
+    const resultsSnapshot = await electionRef.collection("results").where("partyId", "==", partyId).get();
+
+    if (resultsSnapshot.empty) {
+      return { success: false, message: "No results document found for the given party ID" };
+    }
+
+    // Update the vote count for the matching result document
+    const resultDoc = resultsSnapshot.docs[0]; // Assuming there is only one match
+    await resultDoc.ref.update({
+      voteCount: admin.firestore.FieldValue.increment(1) // Increment the vote count by 1
+    });
 
     // Generate the hash
     const hashString = `${nrcNumber}${partyId}`;
