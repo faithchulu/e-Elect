@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3001",
     allowedHeaders: [
       "Access-Control-Allow-Origin",
       "Content-Type",
@@ -19,6 +19,7 @@ app.use(
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
+    credentials: true,
   })
 );
 
@@ -30,6 +31,7 @@ const partyRoutes = require("./routes/partyRoutes");
 const electionRoutes = require("./routes/electionRoutes");
 const authRoutes = require("./routes/authRoutes");
 const candidateRoutes = require("./routes/candidateRoutes");
+const scanRoutes = require("./routes/scanRoutes");
 
 app.get("/", (req, res) => {
   res.send("<h2>E-elect backend server up and running!</h2>");
@@ -43,6 +45,7 @@ app.use("/api/party", partyRoutes);
 app.use("/api/election", electionRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/candidate", candidateRoutes);
+app.use("/api/scan",scanRoutes);
 
 const PORT = 4000;
 
