@@ -1,12 +1,18 @@
 "use client";
-import { useState } from 'react';
-import { ChevronRightIcon, ChevronLeftIcon, DocumentPlusIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
-import HorizontalNav from '@/components/HorizontalNav/HorizontalNav';
-import VoteBG from '../../../../public/images/backgrounds/vote-bg.jpg';
-import axios from 'axios';
+import { useState } from "react";
+import {
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  DocumentPlusIcon,
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
+import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
+import VoteBG from "../../../../public/images/backgrounds/vote-bg.jpg";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const VoterRegistrationForm = () => {
+  const router = useRouter();
   // Define the state type to allow both null and File for nrcCopy
   type FormDataType = {
     fullName: string;
@@ -21,21 +27,24 @@ const VoterRegistrationForm = () => {
 
   // State variables to store form data
   const [formData, setFormData] = useState<FormDataType>({
-    fullName: '',
-    dateOfBirth: '',
-    gender: '',
-    nrcNumber: '',
-    phoneNumber: '',
-    residentialAddress: '',
-    province: '',
-    constituency: '',
+    fullName: "",
+    dateOfBirth: "",
+    gender: "",
+    nrcNumber: "",
+    phoneNumber: "",
+    residentialAddress: "",
+    province: "",
+    constituency: "",
   });
 
   // State variable to track current step of the form
   const [currentStep, setCurrentStep] = useState(1);
-
   // Function to handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -43,16 +52,23 @@ const VoterRegistrationForm = () => {
     }));
   };
 
-  
-
   // Function to handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try{
-       await axios.post("http://localhost:4000/api/voter/register", formData);
-       console.log("Voter registered successfully!")
-    } catch(error){
-      console.log(error )
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/voter/register",
+        formData,
+      );
+
+      localStorage.setItem("userDetails", JSON.stringify(response.data.voter));
+      console.log(response);
+
+      console.log("Voter registered successfully!");
+
+      router.push("/fingerprint-registration");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -78,43 +94,60 @@ const VoterRegistrationForm = () => {
         />
         <div className="absolute inset-0 bg-green-100 bg-opacity-90"></div>
       </div>
-      <div className="relative z-10 min-h-screen py-30 px-4">
+      <div className="relative z-10 min-h-screen px-4 py-30">
         <HorizontalNav />
-        <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white">
-          <h2 className="text-xl font-semibold mb-4 text-black">Voter Registration Form</h2>
+        <div className="mx-auto mt-8 max-w-md rounded-lg border bg-white p-6 shadow-lg">
+          <h2 className="mb-4 text-xl font-semibold text-black">
+            Voter Registration Form
+          </h2>
           <form onSubmit={handleSubmit}>
             {currentStep === 1 && (
               <>
                 <div className="mb-4">
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+                  <label
+                    htmlFor="fullName"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Full Name
+                  </label>
                   <input
                     type="text"
                     id="fullName"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"
+                    className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                  <label
+                    htmlFor="dateOfBirth"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Date of Birth
+                  </label>
                   <input
                     type="date"
                     id="dateOfBirth"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"
+                    className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                  <label
+                    htmlFor="gender"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Gender
+                  </label>
                   <select
                     id="gender"
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"
+                    className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -126,26 +159,36 @@ const VoterRegistrationForm = () => {
             {currentStep === 2 && (
               <>
                 <div className="mb-4">
-                  <label htmlFor="nrcNumber" className="block text-sm font-medium text-gray-700">NRC Number</label>
+                  <label
+                    htmlFor="nrcNumber"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    NRC Number
+                  </label>
                   <input
                     type="text"
                     id="nrcNumber"
                     name="nrcNumber"
                     value={formData.nrcNumber}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 mt-1 block w-full rounded-md p-1.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
-                
+
                 <div className="mb-4">
-                  <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                  <label
+                    htmlFor="phoneNumber"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Phone Number
+                  </label>
                   <input
                     type="tel"
                     id="phoneNumber"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 mt-1 block w-full rounded-md p-1.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </>
@@ -153,24 +196,34 @@ const VoterRegistrationForm = () => {
             {currentStep === 3 && (
               <>
                 <div className="mb-4">
-                  <label htmlFor="residentialAddress" className="block text-sm font-medium text-gray-700">Residential Address</label>
+                  <label
+                    htmlFor="residentialAddress"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Residential Address
+                  </label>
                   <textarea
                     id="residentialAddress"
                     name="residentialAddress"
                     rows={3}
                     value={formData.residentialAddress}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="province" className="block text-sm font-medium text-gray-700">Province</label>
+                  <label
+                    htmlFor="province"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Province
+                  </label>
                   <select
                     id="province"
                     name="province"
                     value={formData.province}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"
+                    className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
                     <option value="">Select Province</option>
                     <option value="lusaka">Lusaka</option>
@@ -186,13 +239,18 @@ const VoterRegistrationForm = () => {
                   </select>
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="constituency" className="block text-sm font-medium text-gray-700">Constituency</label>
+                  <label
+                    htmlFor="constituency"
+                    className="text-gray-700 block text-sm font-medium"
+                  >
+                    Constituency
+                  </label>
                   <select
                     id="constituency"
                     name="constituency"
                     value={formData.constituency}
                     onChange={handleChange}
-                    className="mt-1 p-1.5 block w-full rounded-md border-green-600 shadow-sm focus:border-green-500 focus:ring-green-500"
+                    className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
                     <option value="">Select constituency</option>
                     <option value="lusaka">Lusaka</option>
@@ -209,14 +267,14 @@ const VoterRegistrationForm = () => {
                 </div>
               </>
             )}
-            <div className="flex justify-between mt-8">
+            <div className="mt-8 flex justify-between">
               {currentStep > 1 && (
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="inline-flex items-center px-4 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="text-gray-700 inline-flex items-center rounded-md border border-green-500 bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
-                  <ChevronLeftIcon className="w-5 h-5 mr-2" />
+                  <ChevronLeftIcon className="mr-2 h-5 w-5" />
                   Previous
                 </button>
               )}
@@ -224,20 +282,18 @@ const VoterRegistrationForm = () => {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="inline-flex items-center px-4 py-2 border border-green-600 rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center rounded-md border border-green-600 bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Next
-                  <ChevronRightIcon className="w-5 h-5 ml-2" />
+                  <ChevronRightIcon className="ml-2 h-5 w-5" />
                 </button>
               ) : (
-                
-                  <button
-                    type="submit"
-                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                    Submit
-                  </button>
-                
+                <button
+                  type="submit"
+                  className="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  Submit
+                </button>
               )}
             </div>
           </form>
