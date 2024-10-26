@@ -3,15 +3,17 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { db } = require("./firebaseAdmin");
+const cookieParser = require("cookie-parser");
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     allowedHeaders: [
       "Access-Control-Allow-Origin",
       "Content-Type",
@@ -45,7 +47,7 @@ app.use("/api/party", partyRoutes);
 app.use("/api/election", electionRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/candidate", candidateRoutes);
-app.use("/api/scan",scanRoutes);
+app.use("/api/scan", scanRoutes);
 
 const PORT = 4000;
 

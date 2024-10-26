@@ -13,9 +13,9 @@ const HorizontalNav = () => {
 
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Cast Vote', href: '/cast-vote/37848dhhd8' },
+    { name: 'Cast Vote', href: '/cast-vote/8MagGuFLolpQMJnnxHxe' },
     { name: 'Register', href: '/voter-registration/2345' },
-    { name: 'Results', href: '/results/2456' },
+    { name: 'Results', href: '/results/8MagGuFLolpQMJnnxHxe' },
   ];
 
   return (

@@ -9,6 +9,7 @@ const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
   const [modalText, setModalText] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     const userDetailsString = localStorage.getItem("userDetails");
@@ -17,8 +18,14 @@ const AuthPage = () => {
       if (userDetails?.nrcNumber) {
         setNrcNumber(userDetails.nrcNumber);
       }
+      if (userDetails?.id) {
+        setUserId(userDetails.id);
+        console.log("this is usr id", userDetails.id);
+      }
     }
   }, []);
+
+  console.log("this is second user id", userId);
 
   const showModal = (text: string) => {
     setModalText(text);
@@ -32,7 +39,7 @@ const AuthPage = () => {
   const handleRegistration = async () => {
     try {
       const initResponse = await fetch(
-        `${SERVER_URL}/api/scan/init-register?nrcNumber=${nrcNumber}`,
+        `${SERVER_URL}/api/scan/init-register?nrcNumber=${nrcNumber}&userId=${userId}`,
         {
           credentials: "include",
         },
@@ -89,7 +96,7 @@ const AuthPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(registrationResponse),
+          body: JSON.stringify({ ...registrationResponse, userId }),
         },
       );
 
