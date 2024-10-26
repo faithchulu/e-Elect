@@ -39,6 +39,10 @@ const VoterRegistrationForm = () => {
 
   // State variable to track current step of the form
   const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   // Function to handle input change
   const handleChange = (
     event: React.ChangeEvent<
@@ -65,10 +69,14 @@ const VoterRegistrationForm = () => {
       console.log(response);
 
       console.log("Voter registered successfully!");
+      setSuccess("Voter registered successfully!");
+      setLoading(false);
 
-      router.push("/fingerprint-registration");
-    } catch (error) {
-      console.log(error);
+      setTimeout(() => router.push("/fingerprint-registration"), 4000);
+    } catch (err) {
+      console.error(err);
+      setError("Registration failed. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -100,6 +108,11 @@ const VoterRegistrationForm = () => {
           <h2 className="mb-4 text-xl font-semibold text-black">
             Voter Registration Form
           </h2>
+
+          {loading && <p className="text-blue-500">Submitting your registration...</p>}
+          {success && <p className="text-green-500">{success}</p>}
+          {error && <p className="text-red-500">{error}</p>}
+
           <form onSubmit={handleSubmit}>
             {currentStep === 1 && (
               <>
@@ -114,6 +127,7 @@ const VoterRegistrationForm = () => {
                     type="text"
                     id="fullName"
                     name="fullName"
+                    required
                     value={formData.fullName}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
@@ -130,6 +144,7 @@ const VoterRegistrationForm = () => {
                     type="date"
                     id="dateOfBirth"
                     name="dateOfBirth"
+                    required
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
@@ -146,6 +161,7 @@ const VoterRegistrationForm = () => {
                     id="gender"
                     name="gender"
                     value={formData.gender}
+                    required
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
@@ -170,6 +186,7 @@ const VoterRegistrationForm = () => {
                     id="nrcNumber"
                     name="nrcNumber"
                     value={formData.nrcNumber}
+                    required
                     onChange={handleChange}
                     className="border-gray-300 mt-1 block w-full rounded-md p-1.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
@@ -188,6 +205,7 @@ const VoterRegistrationForm = () => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    required
                     className="border-gray-300 mt-1 block w-full rounded-md p-1.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
@@ -208,6 +226,7 @@ const VoterRegistrationForm = () => {
                     rows={3}
                     value={formData.residentialAddress}
                     onChange={handleChange}
+                    required
                     className="border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
@@ -223,6 +242,7 @@ const VoterRegistrationForm = () => {
                     name="province"
                     value={formData.province}
                     onChange={handleChange}
+                    required
                     className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
                     <option value="">Select Province</option>
@@ -249,6 +269,7 @@ const VoterRegistrationForm = () => {
                     id="constituency"
                     name="constituency"
                     value={formData.constituency}
+                    required
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-green-600 p-1.5 shadow-sm focus:border-green-500 focus:ring-green-500"
                   >
@@ -291,8 +312,9 @@ const VoterRegistrationForm = () => {
                 <button
                   type="submit"
                   className="inline-flex items-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  disabled={loading}
                 >
-                  Submit
+                   {loading ? "Submitting..." : "Submit"}
                 </button>
               )}
             </div>

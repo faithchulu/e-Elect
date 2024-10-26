@@ -56,7 +56,7 @@ const VoterAuthForm = () => {
           electionId: electionid,
           partyId: candidateid,
           nrcNumber: nrcNumber,
-          voterAddress: "0x7D750eD713Eb903552031B41ea55d6e197887ECE"
+          voterAddress: "0x3f4D23C26BA5Fce11BDd6D28FE0f298207f025cc"
         });
         
         setVoteConfirmed(true); // Set vote confirmation to true
