@@ -11,6 +11,9 @@ import VoteBG from "../../../../public/images/backgrounds/vote-bg.jpg";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+
+
+
 const VoterRegistrationForm = () => {
   const router = useRouter();
   // Define the state type to allow both null and File for nrcCopy

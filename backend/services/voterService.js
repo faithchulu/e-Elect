@@ -2,22 +2,54 @@ const admin = require("firebase-admin");
 const db = admin.firestore();
 const votersCollection = db.collection("voters");
 
-// Function to register a voter
-async function registerVoter({
-  fullName,
-  dateOfBirth,
-  gender,
-  nrcNumber,
-  phoneNumber,
-  residentialAddress,
-  province,
-  constituency,
-}) {
-  try {
-    // Validate inputs if needed
+function calculateAge(dateOfBirth) {
+  const dob = new Date(dateOfBirth);
+  const diff = Date.now() - dob.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)); // Approximate age in years
+}
 
-    // Example: Store voter details in Firestore
-    const voterRef = db.collection("voters").doc();
+// Function to register a voter with validations
+async function registerVoter(voterData) {
+  const {
+    fullName,
+    dateOfBirth,
+    gender,
+    nrcNumber,
+    phoneNumber,
+    residentialAddress,
+    province,
+    constituency,
+  } = voterData;
+
+  try {
+    // Validation array to hold error messages
+    const validationErrors = [];
+
+    // Check if the NRC number already exists
+    const nrcSnapshot = await votersCollection.where("nrcNumber", "==", nrcNumber).get();
+    if (!nrcSnapshot.empty) {
+      validationErrors.push("Voter already exists with this NRC number.");
+    }
+
+    // Check if the phone number already exists
+    const phoneSnapshot = await votersCollection.where("phoneNumber", "==", phoneNumber).get();
+    if (!phoneSnapshot.empty) {
+      validationErrors.push("Phone number belongs to someone else.");
+    }
+
+    // Calculate age and check if the person is old enough to vote
+    const age = calculateAge(dateOfBirth);
+    if (age < 18) {
+      validationErrors.push("You're not old enough to vote.");
+    }
+
+    // If there are any validation errors, return them without registering the voter
+    if (validationErrors.length > 0) {
+      return { success: false, messages: validationErrors };
+    }
+
+    // Register the voter if all checks pass
+    const voterRef = votersCollection.doc();
     await voterRef.set({
       fullName,
       dateOfBirth,
@@ -31,21 +63,24 @@ async function registerVoter({
 
     // Return registered voter details including ID
     return {
-      id: voterRef.id,
-      fullName,
-      dateOfBirth,
-      gender,
-      nrcNumber,
-      phoneNumber,
-      residentialAddress,
-      province,
-      constituency,
+      success: true,
+      message: "Voter registered successfully",
+      data: {
+        id: voterRef.id,
+        fullName,
+        dateOfBirth,
+        gender,
+        nrcNumber,
+        phoneNumber,
+        residentialAddress,
+        province,
+        constituency,
+      },
     };
   } catch (error) {
-    throw new Error("Failed to register voter: " + error.message);
+    return { success: false, message: "Failed to register voter: " + error.message };
   }
 }
-
 // Function to get all voters
 const getAllVoters = async () => {
   try {
