@@ -108,7 +108,6 @@ const VoterTable = () => {
           <div className="col-span-1 flex items-center">
             <button onClick={() => deleteVoter(voter.id)} className="text-meta-1">
               <TrashIcon className="w-4 h-4"/>
-              
             </button>
           </div>
         </div>
