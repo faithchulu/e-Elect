@@ -1,15 +1,13 @@
 "use client";
 import { useState } from "react";
-import {
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  DocumentPlusIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronRightIcon} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 import VoteBG from "../../../../public/images/backgrounds/vote-bg.jpg";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import passage from "@/config/passage"
+
 
 // Define the province type
 type Province = 
@@ -39,7 +37,9 @@ const constituenciesByProvince: Record<Province, string[]> = {
 };
 
 const VoterRegistrationForm = () => {
+
   const router = useRouter();
+
   type FormDataType = {
     fullName: string;
     dateOfBirth: string;
@@ -90,19 +90,35 @@ const VoterRegistrationForm = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/voter/register",
-        formData,
-      );
+      // Register user on Passage with NRC number as identifier
+      const passageResponse = await passage.createUser({
+        identifier: formData.nrcNumber,  // Use NRC as identifier
+      });
 
-      localStorage.setItem("userDetails", JSON.stringify(response.data.voter));
-      console.log("Voter registered successfully!");
-      setSuccess("Voter registered successfully!");
-      setLoading(false);
-      setTimeout(() => router.push("/fingerprint-registration"), 4000);
-    } catch (err) {
-      console.error(err);
+      if (passageResponse && passageResponse.user) {
+        // Enable biometrics (fingerprint) for the user
+        await passage.enableBiometrics(passageResponse.user.id);
+
+        // Register user on Firebase via API endpoint
+        const firebaseResponse = await axios.post(
+          "http://localhost:4000/api/voter/register",
+          formData
+        );
+
+        // Save the voter data in local storage if needed
+        localStorage.setItem("userDetails", JSON.stringify(firebaseResponse.data.voter));
+        console.log("User registered on both Firebase and Passage.");
+
+        setSuccess("Voter registered successfully!");
+        setError(null);
+      } else {
+        throw new Error("Failed to register on Passage");
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
       setError("Registration failed. Please try again.");
+      setSuccess(null);
+    } finally {
       setLoading(false);
     }
   };

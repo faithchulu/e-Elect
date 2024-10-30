@@ -1,12 +1,12 @@
 const { db } = require('../firebaseAdmin');
 const admin = require('firebase-admin');
 
-async function createVoter(email, name, passKey) {
+async function createVoter(nrcNumber, name, passKey) {
     const voterRef = db.collection('voters').doc();
     const passKeyRef = await createPassKey(passKey);
 
     await voterRef.set({
-        nrcNumber,
+        nrcNumber: nrcNumber,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         passKeyId: passKeyRef.id,
     });

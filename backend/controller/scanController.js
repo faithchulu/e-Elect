@@ -101,7 +101,7 @@ const verifyRegister = async (req, res) => {
         }
       });
 
-      await createVoter(regInfo.email, regInfo.userId, fieldsToLog);
+      await createVoter(regInfo.nrcNumber, regInfo.userId, fieldsToLog);
 
       res.clearCookie("regInfo");
       return res.json({ verified: verification.verified });
