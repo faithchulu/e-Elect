@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/admin/active-elections/test/page.jsx", "src/app/admin/political-parties/create-party/page.jsx", "src/app/utilities/registerUser.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/admin/active-elections/test/page.jsx", "src/app/admin/political-parties/create-party/page.jsx", "src/app/utilities/registerUser.ts"],
   "exclude": ["node_modules"]
 }
