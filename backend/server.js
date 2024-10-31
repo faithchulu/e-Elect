@@ -51,6 +51,18 @@ app.use("/api/scan", scanRoutes);
 
 const PORT = 4000;
 
+
+app.get("/api/cookies", (req, res) => {
+  // Log all cookies to the console
+  console.log("All Cookies: ", req.cookies);
+
+  // Return all cookies in the response
+  res.status(200).json({
+    message: "All cookies retrieved successfully",
+    cookies: req.cookies,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`E-Voting Backend Server running on http://localhost:${PORT}`);
 });

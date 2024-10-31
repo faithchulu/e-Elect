@@ -4,6 +4,7 @@ import { startRegistration } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms";
+import { useRouter } from "next/navigation";
 
 const SERVER_URL = "http://localhost:4000";
 
@@ -12,6 +13,7 @@ const AuthPage = () => {
   const [modalText, setModalText] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const user = useRecoilValue(userState);
+  const router = useRouter();
 
   const showModal = (text: string) => {
     setModalText(text);
@@ -30,6 +32,8 @@ const AuthPage = () => {
           credentials: "include",
         },
       );
+
+      console.log(initResponse);
 
       if (!initResponse.ok) {
         const error = await initResponse.json();
@@ -93,6 +97,7 @@ const AuthPage = () => {
 
       if (verifyData.verified) {
         showModal(`Successfully registered NRC number: ${nrcNumber}`);
+        setTimeout(() => router.push("/fingerprint-registration"), 4000);
       } else {
         showModal("Failed to register");
       }

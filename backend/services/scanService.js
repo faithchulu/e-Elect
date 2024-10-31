@@ -25,13 +25,28 @@ async function createPassKey(passKey) {
         transports: passKey.transports || ['internal'],
         credentialID: passKey.credentialID,
         userId: passKey.userId,
+        nrcNumber:passKey.nrcNumber
     });
 
     return passKeyRef;
 }
 
-async function getVoterByEmail(email) {
-    const snapshot = await db.collection('voters').where('email', '==', email).get();
+async function getVoterByEmail(nrcNumber) {
+    const snapshot = await db.collection('passKeys').where('nrcNumber', '==', nrcNumber).get();
+    console.log(snapshot);
+    
+    if (snapshot.empty) {
+        return null;
+    }
+
+    const voter = snapshot.docs[0];
+    console.log(voter);
+    
+    return { id: voter.id, ...voter.data() };
+}
+
+async function getVoterByEmails(nrcNumber) {
+    const snapshot = await db.collection('passkeys').where('nrcNumber', '==', nrcNumber).get();
     if (snapshot.empty) {
         return null;
     }
@@ -51,24 +66,45 @@ async function getVoterById(id) {
     return { id: voterSnap.id, ...voterSnap.data() };
 }
 
-async function updateVoterCounter(voterId, counter) {
-    const voterRef = db.collection('voters').doc(voterId);
+async function getVoterPassKeyById(userId) {
+    const voterRef = db.collection('passKeys').doc(userId);
+
+    const doc = await voterRef.get();
+
+    console.log("this is ref",doc);
+    
     const voterSnap = await voterRef.get();
 
-    if (!voterSnap.exists) {
+    if (!voterRef.exists) {
+        return null;
+    }
+
+    return { id: voterRef.id, ...voterRef.data() };
+}
+
+async function updateVoterCounter(userId, counter) {
+    // Find the document in the passKeys collection based on userId
+    const voterSnap = await db.collection('passKeys').where('userId', '==', userId).limit(1).get();
+
+    if (voterSnap.empty) {
         throw new Error("Voter not found");
     }
 
-    const passKeyId = voterSnap.data().passKeyId;
-    const passKeyRef = db.collection('passKeys').doc(passKeyId);
+    // Assuming each userId is unique and we only expect one document
+    const voterDoc = voterSnap.docs[0];
+    const passKeyId = voterDoc.id; // Use the document ID as the passKeyId
 
-    await passKeyRef.update({ counter });
+    // Update the counter for the found document
+    await db.collection('passKeys').doc(passKeyId).update({ counter });
 }
+
 
 module.exports = {
     createVoter,
     createPassKey,
     getVoterByEmail,
+    getVoterByEmails,
     getVoterById,
     updateVoterCounter,
+    getVoterPassKeyById
 };

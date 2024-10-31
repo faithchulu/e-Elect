@@ -8,3 +8,10 @@ export const userState = atom<Voter | null>({
   dangerouslyAllowMutability: true,
   effects_UNSTABLE: [localPersistEffect],
 });
+
+export const optionsState = atom<Voter | null>({
+  key: "optionsState",
+  default: null,
+  dangerouslyAllowMutability: true,
+  effects_UNSTABLE: [localPersistEffect],
+});

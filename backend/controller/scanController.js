@@ -9,6 +9,7 @@ const {
   createVoter,
   updateVoterCounter,
   getVoterById,
+  getVoterPassKeyById,
 } = require("../services/scanService");
 
 const CLIENT_URL = "http://localhost:3000";
@@ -22,9 +23,9 @@ const initRegister = async (req, res) => {
 
   try {
     const existingVoter = await getVoterByEmail(nrcNumber);
-    if (existingVoter != null) {
-      return res.status(400).json({ error: "Voter already exists" });
-    }
+    // if (existingVoter != null) {
+    //   return res.status(400).json({ error: "Voter already exists" });
+    // }
 
     const options = await generateRegistrationOptions({
       rpID: RP_ID,
@@ -119,7 +120,7 @@ const verifyRegister = async (req, res) => {
 };
 
 const initAuth = async (req, res) => {
-  const email = req.query.email;
+  const email = req.query.nrcNumber;
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
   }
@@ -130,8 +131,7 @@ const initAuth = async (req, res) => {
       return res.status(400).json({ error: "No voter for this email" });
     }
 
-    const passKey = voter.passKey[0];
-
+    const passKey = voter;
     const options = await generateAuthenticationOptions({
       rpID: RP_ID,
       allowCredentials: [
@@ -143,16 +143,25 @@ const initAuth = async (req, res) => {
       ],
     });
 
-    res.cookie(
-      "authInfo",
-      JSON.stringify({
-        userId: voter.id,
-        challenge: options.challenge,
-      }),
-      { httpOnly: true, maxAge: 60000, secure: true }
-    );
+    const authInfo = JSON.stringify({
+      userId: voter.userId,
+      challenge: options.challenge,
+    });
 
-    res.json(options);
+    // Set the cookie correctly
+    res.cookie("authInfo", authInfo, {
+      httpOnly: true,
+      maxAge: 100000,
+      secure: false, // Set to true in production
+      sameSite: "None", // Or adjust as necessary for your case
+    });
+    const payload = {
+      options,
+      authInfo,
+      voter,
+    };
+    console.log("Cookie 'authInfo' set with value:", authInfo);
+    res.json(payload);
   } catch (error) {
     console.error("Error during /init-auth:", error);
     return res.status(500).json({ error: "Server error" });
@@ -160,34 +169,113 @@ const initAuth = async (req, res) => {
 };
 
 const verifyAuth = async (req, res) => {
-  const authInfo = JSON.parse(req.cookies.authInfo);
+  console.log("this is data", req.body);
 
-  if (!authInfo) {
-    return res.status(400).json({ error: "Authentication info not found" });
-  }
+  const authInfo = req.body;
+  console.log("this is credential id my son", authInfo.credentialId);
+
+  const parsedAuthInfo = JSON.parse(authInfo.authInfo);
+
+  console.log("this is credential id my son", authInfo.credentialId);
+
+  // let authInfo;
+  // try {
+  //   authInfo = JSON.parse(req.cookies.authInfo);
+  // } catch (error) {
+  //   console.error("Error parsing authInfo cookie:", error);
+  //   return res.status(400).json({ error: "Invalid authInfo format" });
+  // }
+
+  console.log("this is user id", parsedAuthInfo.userId);
 
   try {
-    const voter = await getVoterById(authInfo.userId);
-    const passKey = voter.passKey[0];
+    const voter = await getVoterById(parsedAuthInfo.userId);
 
-    const verification = await verifyAuthenticationResponse({
-      response: req.body,
-      expectedChallenge: authInfo.challenge,
+    // const passkeys = await getVoterPassKeyById(parsedAuthInfo.userId)
+
+    // console.log("passkeys and credentialId",passKeys)
+
+    if (!voter) {
+      return res.status(400).json({ error: "Voter not found" });
+    }
+
+    console.log("this is cred id son", authInfo.credentialId);
+
+    console.log("response:", parsedAuthInfo);
+    console.log("Challenge:", parsedAuthInfo.challenge);
+    console.log("Expected Origin:", CLIENT_URL);
+    console.log("Expected RPID:", RP_ID);
+    console.log("Credential ID:", authInfo.credentialId);
+    console.log("Authenticator Object:", {
+      credentialID: authInfo.credentialId,
+      credentialPublicKey: authInfo.publicKey,
+      counter: authInfo.voter.counter,
+      transports: authInfo.transport,
+    });
+
+    console.log("this is counter stuff", authInfo.voter.counter);
+    console.log("Full authInfo:", authInfo);
+
+    if (!authInfo) {
+      throw new Error("Missing authInfo or invalid authentication information");
+    }
+
+    if (!authInfo.voter) {
+      throw new Error(
+        "Missing authInfo voter or invalid authentication information"
+      );
+    }
+
+    // if (!authInfo.counter) {
+    //   console.log(authInfo.counter)
+    //   throw new Error("Missing authInfo voter counter or invalid authentication information");
+    // }
+    // const passKey = voter.passKey[0];
+
+    console.log("Full verification with counter:", {
+      expectedChallenge: parsedAuthInfo.challenge,
       expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
       authenticator: {
-        credentialID: passKey.credentialID,
-        credentialPublicKey: Buffer.from(passKey.publicKey, "base64"),
-        counter: passKey.counter,
-        transports: passKey.transports,
+        credentialID: authInfo.credentialId,
+        credentialPublicKey: Buffer.from(authInfo.publicKey, "base64"),
+        counter: authInfo.counter,
+        transports: authInfo.transport,
+      },
+    });
+
+    console.log("Full verification params:", {
+      expectedChallenge: parsedAuthInfo.challenge,
+      expectedOrigin: CLIENT_URL,
+      expectedRPID: RP_ID,
+      authenticator: {
+        credentialID: authInfo.credentialId,
+        credentialPublicKey: authInfo.publicKey,
+        counter: 0,
+        transports: authInfo.transport,
+      },
+    });
+
+    console.log("Auth Response Structure:", authInfo.auth);
+
+    const verification = await verifyAuthenticationResponse({
+      response: authInfo.auth,
+      expectedChallenge: parsedAuthInfo.challenge,
+      expectedOrigin: CLIENT_URL,
+      expectedRPID: RP_ID,
+      counter: "0",
+      authenticator: {
+        credentialID: authInfo.credentialId,
+        credentialPublicKey: authInfo.publicKey,
+        counter: "0",
+        transports: "",
       },
     });
 
     if (verification.verified) {
-      await updateVoterCounter(
-        voter.id,
-        verification.authenticationInfo.newCounter
-      );
+      console.log("this is great");
+
+      await updateVoterCounter(parsedAuthInfo.userId, authInfo.counter);
       res.clearCookie("authInfo");
       return res.json({ verified: verification.verified });
     } else {
@@ -196,7 +284,11 @@ const verifyAuth = async (req, res) => {
         .json({ verified: false, error: "Verification failed" });
     }
   } catch (error) {
-    console.error("Error during /verify-auth:", error);
+    console.error({
+      message: "Error during /verify-auth:",
+      error: error,
+      errors: error.message,
+    });
     return res.status(500).json({ error: "Server error" });
   }
 };
