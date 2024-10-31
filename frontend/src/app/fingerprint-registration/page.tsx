@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
+import { useRecoilValue } from "recoil";
+import { userState } from "../atoms";
 
 const SERVER_URL = "http://localhost:4000";
 
@@ -9,23 +11,7 @@ const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
   const [modalText, setModalText] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const userDetailsString = localStorage.getItem("userDetails");
-    if (userDetailsString) {
-      const userDetails = JSON.parse(userDetailsString);
-      if (userDetails?.nrcNumber) {
-        setNrcNumber(userDetails.nrcNumber);
-      }
-      if (userDetails?.id) {
-        setUserId(userDetails.id);
-        console.log("this is usr id", userDetails.id);
-      }
-    }
-  }, []);
-
-  console.log("this is second user id", userId);
+  const user = useRecoilValue(userState);
 
   const showModal = (text: string) => {
     setModalText(text);
@@ -39,7 +25,7 @@ const AuthPage = () => {
   const handleRegistration = async () => {
     try {
       const initResponse = await fetch(
-        `${SERVER_URL}/api/scan/init-register?nrcNumber=${nrcNumber}&userId=${userId}`,
+        `${SERVER_URL}/api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
         {
           credentials: "include",
         },
@@ -63,19 +49,15 @@ const AuthPage = () => {
         return;
       }
 
-      // Access the user's email from local storage
-      const userDetailsString = localStorage.getItem("userDetails");
       let userName = "";
-      if (userDetailsString) {
-        const userDetails = JSON.parse(userDetailsString);
-        userName = userDetails.email || ""; // Assuming userDetails has an email property
+      if (user) {
+        userName = user?.fullName || "";
       }
 
-      // Use user email if available
       if (!optionsJSON.user || !optionsJSON.user.name) {
         optionsJSON.user = {
           ...optionsJSON.user,
-          name: userName || "Default User", // Fallback to a default name if email is not available
+          name: userName || "Default User",
         };
       }
 
@@ -87,6 +69,9 @@ const AuthPage = () => {
       // Log the registration response
       console.log("Registration response:", registrationResponse);
 
+      const userId = user?.id;
+      const nrcNumber = user?.nrcNumber;
+
       // 3. Save passkey in DB
       const verifyResponse = await fetch(
         `${SERVER_URL}/api/scan/verify-register`,
@@ -96,7 +81,7 @@ const AuthPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...registrationResponse, userId }),
+          body: JSON.stringify({ ...registrationResponse, userId, nrcNumber }),
         },
       );
 
@@ -107,7 +92,6 @@ const AuthPage = () => {
       }
 
       if (verifyData.verified) {
-        localStorage.setItem("userDetails", JSON.stringify({ nrcNumber }));
         showModal(`Successfully registered NRC number: ${nrcNumber}`);
       } else {
         showModal("Failed to register");
@@ -125,7 +109,7 @@ const AuthPage = () => {
         <input
           type="text"
           placeholder="NRC Number"
-          value={nrcNumber}
+          value={user?.nrcNumber}
           onChange={(e) => setNrcNumber(e.target.value)}
           className="border-gray-300 mb-4 w-full rounded border p-2 text-xl"
         />
