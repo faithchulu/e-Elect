@@ -37,7 +37,7 @@ const ElectionCard: React.FC<ElectionCardProps> = ({
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow-md bg-indigo-200">
+    <div className="border rounded-lg p-4 shadow-md bg-indigo-100">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-slate-800">{electionName}</h2>
         <button onClick={onEdit} className="text-blue-800 hover:text-blue-600">
