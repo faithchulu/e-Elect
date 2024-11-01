@@ -87,7 +87,7 @@ const DropdownNotification = () => {
             >
               <p className="text-sm">
                 <span className="text-black dark:text-white">
-                  Edit your information in a swipe
+                  New election created!
                 </span>{" "}
                 Sint occaecat cupidatat non proident, sunt in culpa qui officia
                 deserunt mollit anim.
@@ -103,7 +103,7 @@ const DropdownNotification = () => {
             >
               <p className="text-sm">
                 <span className="text-black dark:text-white">
-                  It is a long established fact
+                  Election results are ready! Click here to view
                 </span>{" "}
                 that a reader will be distracted by the readable.
               </p>
@@ -118,7 +118,7 @@ const DropdownNotification = () => {
             >
               <p className="text-sm">
                 <span className="text-black dark:text-white">
-                  There are many variations
+                  Admin Moses Banda deleted 23 voters
                 </span>{" "}
                 of passages of Lorem Ipsum available, but the majority have
                 suffered
@@ -134,7 +134,7 @@ const DropdownNotification = () => {
             >
               <p className="text-sm">
                 <span className="text-black dark:text-white">
-                  There are many variations
+                  17 new voter registrations!
                 </span>{" "}
                 of passages of Lorem Ipsum available, but the majority have
                 suffered
