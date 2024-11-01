@@ -6,13 +6,16 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../atoms/atoms";
 import { useRouter } from "next/navigation";
 
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "http://localhost:5000";
 
 const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
   const [modalText, setModalText] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const user = useRecoilValue(userState);
+
+  console.log("this is user", user);
+
   const router = useRouter();
 
   const showModal = (text: string) => {
@@ -65,10 +68,10 @@ const AuthPage = () => {
         };
       }
 
+      console.log("this is user", user);
+
       // 2. Create passkey - pass options in correct format
-      const registrationResponse = await startRegistration({
-        optionsJSON,
-      });
+      const registrationResponse = await startRegistration(optionsJSON);
 
       // Log the registration response
       console.log("Registration response:", registrationResponse);

@@ -12,7 +12,6 @@ import {
   startAuthentication,
   startRegistration,
 } from "@simplewebauthn/browser";
-import { log } from "node:console";
 
 const SERVER_URL = "http://localhost:4000";
 
@@ -84,9 +83,9 @@ const VoterAuthForm = () => {
 
       console.log("processing the options");
 
-      const authJSON = await startAuthentication({
-        optionsJSON: response.data.options,
-      });
+      const optionsJSON = response.data.options;
+
+      const authJSON = await startAuthentication(optionsJSON);
 
       console.log("this is auth options", authJSON);
       console.log("this is my goal to get the public key", options.voter);
