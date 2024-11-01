@@ -2,7 +2,7 @@ async function createPassKey(passKey) {
   const passKeyRef = db.collection("passKeys").doc();
   await passKeyRef.set({
     publicKey: passKey.publicKey,
-    counter: passKey.counter,
+    counter: passKey.counter || 1,
     deviceType: passKey.deviceType,
     backedUp: passKey.backedUp,
     transports: passKey.transports || ["internal"],
