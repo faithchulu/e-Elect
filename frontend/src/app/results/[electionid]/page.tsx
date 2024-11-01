@@ -128,13 +128,10 @@ const ElectionResultsPage = () => {
   return (
     <div>
       <HorizontalNav/>
-      <div className="px-4 py-20">
+      <div className="px-4 py-28">
         <div className='flex justify-between'>
           <h1 className="text-3xl font-bold text-slate-900 mb-4">{election.electionName} Results</h1>
-          <Link href="/admin/active-elections" className="flex bg-meta-4 rounded-md mb-2 shadow-lg px-2 py-1.5 text-white">
-            <ArrowLeftEndOnRectangleIcon className='h-6 w-6'/>
-            Back to active elections
-          </Link>
+         
         </div>
         
         {election.status === 'voting' || election.status === 'closed' ? (
@@ -164,12 +161,7 @@ const ElectionResultsPage = () => {
               <p className="text-xl blink-animation text-blue-900">{totalVotes.toLocaleString()}</p>
             </div>
 
-            {/* Verify Results Button */}
-            {election.status === 'closed' && (
-              <button onClick={handleVerifyClick} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
-                Verify Results
-              </button>
-            )}
+            
           </div>
         ) : (
           <div className="text-lg font-semibold">
