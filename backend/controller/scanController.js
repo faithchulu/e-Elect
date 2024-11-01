@@ -85,7 +85,7 @@ const verifyRegister = async (req, res) => {
       const fieldsToLog = {
         id: registrationInfo?.credential.id,
         publicKey: registrationInfo?.credential.publicKey,
-        counter: 1,
+        counter: registrationInfo?.credential.counter,
         deviceType: registrationInfo?.credentialDeviceType,
         backedUp: registrationInfo?.credentialBackedUp,
         transport: registrationInfo.credential.transports,
@@ -120,15 +120,15 @@ const verifyRegister = async (req, res) => {
 };
 
 const initAuth = async (req, res) => {
-  const email = req.query.nrcNumber;
-  if (!email) {
+  const nrcNumber = req.query.nrcNumber;
+  if (!nrcNumber) {
     return res.status(400).json({ error: "Email is required" });
   }
 
   try {
-    const voter = await getVoterByEmail(email);
+    const voter = await getVoterByEmail(nrcNumber);
     if (voter == null) {
-      return res.status(400).json({ error: "No voter for this email" });
+      return res.status(400).json({ error: "No voter for this Nrc Number" });
     }
 
     const passKey = voter;

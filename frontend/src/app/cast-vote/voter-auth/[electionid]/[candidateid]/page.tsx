@@ -7,7 +7,7 @@ import Sucess from "@/components/Alerts/Sucess";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { optionsState, userState } from "@/app/atoms";
+import { optionsState, userState } from "@/app/atoms/atoms";
 import {
   startAuthentication,
   startRegistration,

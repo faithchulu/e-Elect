@@ -11,7 +11,7 @@ import VoteBG from "../../../../public/images/backgrounds/vote-bg.jpg";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
-import { userState } from "@/app/atoms";
+import { userState } from "@/app/atoms/atoms";
 
 // Define the province type
 type Province =

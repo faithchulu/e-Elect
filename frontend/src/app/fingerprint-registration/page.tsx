@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { useRecoilValue } from "recoil";
-import { userState } from "../atoms";
+import { userState } from "../atoms/atoms";
 import { useRouter } from "next/navigation";
 
 const SERVER_URL = "http://localhost:4000";
