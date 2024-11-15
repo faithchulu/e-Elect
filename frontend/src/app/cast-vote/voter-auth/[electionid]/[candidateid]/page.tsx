@@ -28,13 +28,14 @@ const VoterAuthForm = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const setOptions = useSetRecoilState(optionsState);
   const optionsData = useRecoilValue(optionsState);
+  const [loading, setLoading] = useState(false);
 
   // Fetch party data by candidateId
   useEffect(() => {
     const fetchPartyData = async () => {
       try {
         const response = await axios.get(
-          `https://e-elect-backend.vercel.app//api/party/get-party/${candidateid}`,
+          `https://e-elect-backend.vercel.app/api/party/get-party/${candidateid}`,
         );
         const partyData = response.data;
         setCandidateName(partyData.candidate);
@@ -66,10 +67,11 @@ const VoterAuthForm = () => {
 
   // Request fingerprint scan from the server
   const requestFingerprintScan = async () => {
+    setLoading(true);
     try {
       // Step 1: Initialize fingerprint authentication and retrieve options
       const response = await axios.get(
-        `https://e-elect-backend.vercel.app/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
+        `http://localhost:4000/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
       );
 
       console.log("API Response:", response.data);
@@ -115,7 +117,7 @@ const VoterAuthForm = () => {
       console.log("this is cred man", credentialId);
 
       // Step 3: Send the authentication response back to the server for verification
-      const verifyResponse = await fetch(`https://e-elect-backend.vercel.app/api/scan/verify-auth`, {
+      const verifyResponse = await fetch(`http://localhost:4000/api/scan/verify-auth`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -155,6 +157,8 @@ const VoterAuthForm = () => {
     } catch (error) {
       console.log("this is response", error);
       console.error("Error during fingerprint scan:", error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -167,11 +171,11 @@ const VoterAuthForm = () => {
   const handleConfirm = async (confirm: unknown) => {
     if (confirm) {
       try {
-        await axios.post(`https://e-elect-backend.vercel.app/api/vote/cast-vote`, {
+        await axios.post(`http://localhost:4000/api/vote/cast-vote`, {
           electionId: electionid,
           partyId: candidateid,
           nrcNumber,
-          voterAddress: "0x5c75cC0135BCc52Ad6a5989aBa80e5159e280C66",
+          voterAddress: "0x4C0B4D58285a78B14DA4d6D8B73ff335257b71d5",
         });
 
         setVoteConfirmed(true);
@@ -251,8 +255,9 @@ const VoterAuthForm = () => {
             <button
               onClick={handleFingerprintScan}
               className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              disabled={loading}
             >
-              Scan Fingerprint
+              {loading ? "Processing..." : "Scan Fingerprint"}
             </button>
             {fingerprintScanned && (
               <p className="mt-2 text-green-600">
