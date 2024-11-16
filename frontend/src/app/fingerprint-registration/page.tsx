@@ -71,7 +71,9 @@ const AuthPage = () => {
       console.log("this is user", user);
 
       // 2. Create passkey - pass options in correct format
-      const registrationResponse = await startRegistration(optionsJSON);
+      // const registrationResponse = await startRegistration(optionsJSON);
+
+      const registrationResponse = await startRegistration({ optionsJSON });
 
       // Log the registration response
       console.log("Registration response:", registrationResponse);
