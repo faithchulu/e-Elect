@@ -4,27 +4,40 @@ import { useState, useEffect } from "react";
 import { FingerPrintIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Sucess from "@/components/Alerts/Sucess";
-import { useParams } from 'next/navigation';
-import axios from 'axios';
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { optionsState, userState } from "@/app/atoms/atoms";
+import {
+  startAuthentication,
+  startRegistration,
+} from "@simplewebauthn/browser";
+
+const SERVER_URL = "http://localhost:4000";
 
 const VoterAuthForm = () => {
   const [step, setStep] = useState(1);
-  const [nrcNumber, setNrcNumber] = useState('');
+  const [nrcNumber, setNrcNumber] = useState("");
   const [fingerprintScanned, setFingerprintScanned] = useState(false);
-  const [voteConfirmed, setVoteConfirmed] = useState(false); // New state for vote confirmation
+  const [voteConfirmed, setVoteConfirmed] = useState(false);
   const { electionid, candidateid } = useParams();
   const [candidateName, setCandidateName] = useState("");
-  const [politicalParty, setPoliticalParty] = useState('');
+  const [politicalParty, setPoliticalParty] = useState("");
+  const user = useRecoilValue(userState);
+  const [modalText, setModalText] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const setOptions = useSetRecoilState(optionsState);
+  const optionsData = useRecoilValue(optionsState);
 
   // Fetch party data by candidateId
   useEffect(() => {
     const fetchPartyData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/party/get-party/${candidateid}`);
+        const response = await axios.get(
+          `${SERVER_URL}/api/party/get-party/${candidateid}`,
+        );
         const partyData = response.data;
-        console.log(response.data);
-        
-        setCandidateName(partyData.candidate); 
+        setCandidateName(partyData.candidate);
         setPoliticalParty(partyData.partyName);
       } catch (error) {
         console.error("Error fetching party data:", error);
@@ -37,34 +50,135 @@ const VoterAuthForm = () => {
   }, [candidateid]);
 
   // Submit NRC number and move to the next step
-  const handleNrcNumberSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleNrcNumberSubmit = (e: any) => {
     e.preventDefault();
     setStep(2);
   };
 
+  const showModal = (text: any) => {
+    setModalText(text);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  // Request fingerprint scan from the server
+  const requestFingerprintScan = async () => {
+    try {
+      // Step 1: Initialize fingerprint authentication and retrieve options
+      const response = await axios.get(
+        `http://localhost:4000/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
+      );
+
+      console.log("API Response:", response.data);
+
+      // Check if the response indicates a success
+
+      console.log("these are your options", response.data.options);
+
+      const options = response.data;
+      setOptions(options);
+
+      console.log("processing the options");
+
+      const optionsJSON = response.data.options;
+
+      const authJSON = await startAuthentication({ optionsJSON });
+
+      console.log("this is authJson", authJSON);
+
+      console.log("this is auth options", authJSON);
+      console.log("this is my goal to get the public key", options.voter);
+
+      const creds = options.voter;
+
+      let credentialId;
+
+      // Step 2: Use the passkey to respond to the authentication challenge
+      if (options.options && options.options.allowCredentials) {
+        // Assuming you want the first credential ID
+        const credential = options.options.allowCredentials[0];
+
+        console.log("these are allowed creds", credential);
+
+        console.log("this is your counter", options.voter.counter);
+
+        credentialId = credential.id;
+
+        console.log("Selected Credential ID:", credentialId);
+      } else {
+        console.log("No allowCredentials found.");
+      }
+
+      console.log("this is cred man", credentialId);
+
+      // Step 3: Send the authentication response back to the server for verification
+      const verifyResponse = await fetch(`${SERVER_URL}/api/scan/verify-auth`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...options,
+          optionsData: optionsData,
+          credentialId: options.voter.credentialID,
+          publicKey: options.voter.publicKey,
+          transport: options.voter.transports,
+          counter: options.voter.counter,
+          auth: authJSON,
+        }),
+      });
+
+      const verifyData = await verifyResponse.json();
+      if (!verifyResponse.ok) {
+        throw new Error(verifyData.error);
+      }
+
+      console.log("this is valid data", verifyData);
+
+      // Handle the verification result
+      if (verifyData.verified) {
+        showModal(`Successfully logged in ${nrcNumber}`);
+      } else {
+        showModal(`Failed to log in`);
+      }
+
+      // Update UI based on scan status
+      setFingerprintScanned(true);
+      setStep(3);
+      // } else {
+      //   console.error("Fingerprint scan failed:", response.data.message);
+      // }
+    } catch (error) {
+      console.log("this is response", error);
+      console.error("Error during fingerprint scan:", error);
+    }
+  };
+
   // Simulate fingerprint scan and move to the next step
   const handleFingerprintScan = () => {
-    setFingerprintScanned(true);
-    setStep(3); // Move to the next step after scanning fingerprint
+    requestFingerprintScan(); // Call the function to request a scan
   };
 
   // Handle vote confirmation and send a POST request to cast the vote
-  const handleConfirm = async (confirm: boolean) => {
+  const handleConfirm = async (confirm: unknown) => {
     if (confirm) {
       try {
-        await axios.post('http://localhost:4000/api/vote/cast-vote', {
+        await axios.post(`${SERVER_URL}/api/vote/cast-vote`, {
           electionId: electionid,
           partyId: candidateid,
-          nrcNumber: nrcNumber,
-          voterAddress: "0x3f4D23C26BA5Fce11BDd6D28FE0f298207f025cc"
+          nrcNumber,
+          voterAddress: "0x5c75cC0135BCc52Ad6a5989aBa80e5159e280C66",
         });
-        
-        setVoteConfirmed(true); // Set vote confirmation to true
+
+        setVoteConfirmed(true);
       } catch (error) {
         console.error("Error casting vote:", error);
       }
     } else {
-      // Handle cancellation (e.g., go back to previous step or restart)
       setStep(1);
     }
   };
@@ -76,7 +190,6 @@ const VoterAuthForm = () => {
         window.location.href = `/results/${electionid}`;
       }, 5000);
 
-      // Cleanup the timer on component unmount
       return () => clearTimeout(timer);
     }
   }, [voteConfirmed, electionid]);
@@ -86,64 +199,87 @@ const VoterAuthForm = () => {
       <HorizontalNav />
       <Link
         href={`/cast-vote/${electionid}`}
-        className="inline-flex items-center ml-4 justify-center rounded-md bg-black px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+        className="ml-4 inline-flex items-center justify-center rounded-md bg-black px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
       >
         Back
       </Link>
       {voteConfirmed && (
-        <div className="absolute min-h-screen inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div className="absolute inset-0 z-50 flex min-h-screen items-center justify-center bg-black bg-opacity-75">
           <Sucess candidateName={candidateName} partyName={politicalParty} />
         </div>
       )}
-      <div className="max-w-md mx-auto mt-8 p-6 border rounded-lg shadow-lg bg-white relative">
+      <div className="relative mx-auto mt-8 max-w-md rounded-lg border bg-white p-6 shadow-lg">
         {step === 1 && (
           <form onSubmit={handleNrcNumberSubmit}>
-            <h1 className="text-2xl text-black font-semibold mb-4">Step 1: Enter NRC Number</h1>
+            <h1 className="mb-4 text-2xl font-semibold text-black">
+              Step 1: Enter NRC Number
+            </h1>
             <div className="mb-4">
-              <label htmlFor="nrcNumber" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="nrcNumber"
+                className="text-gray-700 block text-sm font-medium"
+              >
                 NRC Number
               </label>
               <input
                 type="text"
                 id="nrcNumber"
-                className="mt-1 p-2 border border-green-500 rounded-md w-full"
+                className="mt-1 w-full rounded-md border border-green-500 p-2"
                 value={nrcNumber}
                 onChange={(e) => setNrcNumber(e.target.value)}
                 required
               />
             </div>
-            <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <button
+              type="submit"
+              className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
               Next
             </button>
           </form>
         )}
         {step === 2 && (
           <div className="flex flex-col justify-center">
-            <h1 className="text-2xl text-black font-semibold mb-4">Step 2: Scan Fingerprint</h1>
+            <h1 className="mb-4 text-2xl font-semibold text-black">
+              Step 2: Scan Fingerprint
+            </h1>
             <FingerPrintIcon className="h-20" />
-            <p className="mb-4">Please place your finger on the fingerprint scanner for authentication.</p>
-            <button onClick={handleFingerprintScan} className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+            <p className="mb-4">
+              Please place your finger on the fingerprint scanner for
+              authentication.
+            </p>
+            <button
+              onClick={handleFingerprintScan}
+              className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            >
               Scan Fingerprint
             </button>
             {fingerprintScanned && (
-              <p className="text-green-600 mt-2">Fingerprint scanned successfully!</p>
+              <p className="mt-2 text-green-600">
+                Fingerprint scanned successfully!
+              </p>
             )}
           </div>
         )}
         {step === 3 && (
           <div className="flex flex-col justify-center">
-            <h1 className="text-2xl text-black font-semibold mb-4">Step 3: Confirm Your Vote</h1>
-            <p className="mb-4">Are you sure you want to vote for <strong>{candidateName}</strong> of <strong>{politicalParty}</strong>?</p>
+            <h1 className="mb-4 text-2xl font-semibold text-black">
+              Step 3: Confirm Your Vote
+            </h1>
+            <p className="mb-4">
+              Are you sure you want to vote for <strong>{candidateName}</strong>{" "}
+              of <strong>{politicalParty}</strong>?
+            </p>
             <div className="flex justify-between">
               <button
                 onClick={() => handleConfirm(true)}
-                className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 Yes, Im Sure
               </button>
               <button
                 onClick={() => handleConfirm(false)}
-                className="bg-meta-1 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                className="hover:bg-red-600 focus:ring-red-500 rounded-md bg-meta-1 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
               >
                 No, Cancel
               </button>

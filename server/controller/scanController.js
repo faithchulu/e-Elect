@@ -8,8 +8,6 @@ const {
   getVoterByEmail,
   createVoter,
   updateVoterCounter,
-  getVoterById,
-  getVoterPassKeyById,
 } = require("../services/scanService");
 
 const CLIENT_URL = "http://localhost:3000";
