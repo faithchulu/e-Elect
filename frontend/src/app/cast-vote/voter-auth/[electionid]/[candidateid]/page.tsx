@@ -85,7 +85,9 @@ const VoterAuthForm = () => {
 
       const optionsJSON = response.data.options;
 
-      const authJSON = await startAuthentication(optionsJSON);
+      const authJSON = await startAuthentication({ optionsJSON });
+
+      console.log("this is authJson", authJSON);
 
       console.log("this is auth options", authJSON);
       console.log("this is my goal to get the public key", options.voter);
@@ -151,6 +153,7 @@ const VoterAuthForm = () => {
       //   console.error("Fingerprint scan failed:", response.data.message);
       // }
     } catch (error) {
+      console.log("this is response", error);
       console.error("Error during fingerprint scan:", error);
     }
   };
@@ -168,7 +171,7 @@ const VoterAuthForm = () => {
           electionId: electionid,
           partyId: candidateid,
           nrcNumber,
-          voterAddress: "0x3f4D23C26BA5Fce11BDd6D28FE0f298207f025cc",
+          voterAddress: "0x5c75cC0135BCc52Ad6a5989aBa80e5159e280C66",
         });
 
         setVoteConfirmed(true);

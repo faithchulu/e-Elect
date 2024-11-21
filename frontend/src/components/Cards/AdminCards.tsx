@@ -1,8 +1,8 @@
 const projects = [
-    { name: 'New', initials: 'S', href: '#', members: 16, bgColor: 'bg-green-600' },
+    { name: 'New', initials: 'N', href: '#', members: 16, bgColor: 'bg-green-600' },
     { name: 'In Progress', initials: 'IP', href: '#', members: 12, bgColor: 'bg-purple-600' },
-    { name: 'Archieved', initials: 'P', href: '#', members: 16, bgColor: 'bg-yellow-500' },
-    { name: 'Closed', initials: 'US', href: '#', members: 8, bgColor: 'bg-rose-700' },
+    { name: 'Archieved', initials: 'A', href: '#', members: 16, bgColor: 'bg-yellow-500' },
+    { name: 'Closed', initials: 'C', href: '#', members: 8, bgColor: 'bg-rose-700' },
   ];
   
   function classNames(...classes: string[]) {
@@ -29,7 +29,7 @@ const projects = [
                   <a href={project.href} className="font-medium text-gray-900 hover:text-gray-600">
                     {project.name}
                   </a>
-                  <p className="text-gray-500">{project.members} Deliveries</p>
+                  <p className="text-gray-500">{project.members} Elections</p>
                 </div>
               </div>
             </li>
