@@ -69,7 +69,7 @@ const VoterAuthForm = () => {
     try {
       // Step 1: Initialize fingerprint authentication and retrieve options
       const response = await axios.get(
-        `http://localhost:4000/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
+        `https://e-elect-backend.vercel.app/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
       );
 
       console.log("API Response:", response.data);

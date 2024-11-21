@@ -17,7 +17,7 @@ const ElectionDetailsPage = () => {
   useEffect(() => {
     const fetchElection = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/election/get-election/${electionId}`);
+        const response = await axios.get(`https://e-elect-backend.vercel.app/api/election/get-election/${electionId}`);
         setElection(response.data);
         fetchParties(response.data.parties); // Fetch parties once election is set
         console.log(response.data);
@@ -30,7 +30,7 @@ const ElectionDetailsPage = () => {
       try {
         const partyDetails = await Promise.all(
           partyIds.map(async (partyId) => {
-            const res = await axios.get(`http://localhost:4000/api/party/get-party/${partyId}`);
+            const res = await axios.get(`https://e-elect-backend.vercel.app/api/party/get-party/${partyId}`);
             return res.data; // Return each party's data
           })
         );
@@ -45,7 +45,7 @@ const ElectionDetailsPage = () => {
 
   const handleCloseElection = async () => {
     try {
-      await axios.post(`http://localhost:4000/api/election/close-voting/${electionId}`);
+      await axios.post(`https://e-elect-backend.vercel.app/api/election/close-voting/${electionId}`);
       alert('Election closed successfully!');
       setElection({ ...election!, status: 'closed' });
       setIsConfirmingClose(false); // Close the modal after the election is closed

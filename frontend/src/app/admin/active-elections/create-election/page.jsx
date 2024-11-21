@@ -30,7 +30,7 @@ const CreateElection = () => {
     // Fetch parties from the database
     const fetchParties = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/party/get-parties'); 
+        const response = await axios.get('https://e-elect-backend.vercel.app/api/party/get-parties'); 
         setParties(response.data)
         console.log(response.data)
       } catch (error) {
@@ -73,7 +73,7 @@ const CreateElection = () => {
     console.log(electionData)
 
     try {
-      await axios.post('http://localhost:4000/api/election/create', electionData); // Adjust the endpoint as necessary
+      await axios.post('https://e-elect-backend.vercel.app/api/election/create', electionData); // Adjust the endpoint as necessary
       alert('Election created successfully!');
       window.location.href = "/admin/active-elections"
     } catch (error) {

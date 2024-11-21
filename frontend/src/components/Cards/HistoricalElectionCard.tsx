@@ -29,7 +29,7 @@ const HistoricalElectionCard: React.FC<ElectionCardProps> = ({
 
   const handleOpenVoting = async () => {
     try {
-      await axios.post(`http://localhost:4000/api/election/open-voting/${electionId}`);
+      await axios.post(`https://e-elect-backend.vercel.app/api/election/open-voting/${electionId}`);
       alert('Voting opened successfully!'); // Handle success (optional)
     } catch (error) {
       console.error("Error opening voting:", error);

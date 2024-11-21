@@ -5,6 +5,9 @@ import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typ
 import { useRecoilValue } from "recoil";
 import { userState } from "../atoms/atoms";
 import { useRouter } from "next/navigation";
+import VoteBG from "../../../public/images/backgrounds/vote-bg.jpg"
+import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
+import Image from "next/image";
 
 const SERVER_URL = "http://localhost:5000";
 
@@ -12,7 +15,10 @@ const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
   const [modalText, setModalText] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const user = useRecoilValue(userState);
+
+  
 
   console.log("this is user", user);
 
@@ -25,9 +31,13 @@ const AuthPage = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    if (modalText.startsWith("Successfully registered")) {
+      router.push("/");
+    }
   };
 
   const handleRegistration = async () => {
+    setLoading(true);
     try {
       const initResponse = await fetch(
         `${SERVER_URL}/api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
@@ -102,32 +112,49 @@ const AuthPage = () => {
 
       if (verifyData.verified) {
         showModal(`Successfully registered NRC number: ${nrcNumber}`);
-        setTimeout(() => router.push("/fingerprint-registration"), 4000);
+        setTimeout(() => router.push("/"), 4000);
       } else {
         showModal("Failed to register");
       }
     } catch (error: any) {
       console.error("Registration error:", error);
       showModal(`Error during registration: ${error.message}`);
+    } finally{
+      setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gray-100 flex h-screen items-center justify-center">
-      <div className="w-80 rounded-lg bg-white p-6 text-center shadow-md">
-        <h2 className="mb-4 text-2xl font-semibold">NRC Number</h2>
+    <div className="bg-gray-100 flex relative h-screen items-center justify-center">
+      <div className="absolute inset-0">
+        <Image
+            src={VoteBG}
+            alt="Vote Background"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+          />
+        <div className="absolute inset-0 bg-green-100 bg-opacity-90"></div>
+      </div>
+      <div className="relative z-10 min-h-screen px-4 py-30">
+      <HorizontalNav />
+      <div className="w-80 mt-8 rounded-lg bg-white p-6 text-center shadow-md">
+      <h2 className="mb-4 text-xl font-semibold text-black">
+            Fingerprint Registration
+          </h2>
         <input
           type="text"
-          placeholder="NRC Number"
+          placeholder="Enter NRC Number"
           value={user?.nrcNumber}
           onChange={(e) => setNrcNumber(e.target.value)}
           className="border-gray-300 mb-4 w-full rounded border p-2 text-xl"
+          disabled={loading}
         />
         <button
           onClick={handleRegistration}
           className="w-full rounded bg-blue-500 py-2 text-xl text-white transition duration-200 hover:bg-blue-600"
         >
-          Add
+          {loading ? "Processing..." : "Add"}
         </button>
       </div>
 
@@ -147,6 +174,7 @@ const AuthPage = () => {
           </div>
         </dialog>
       )}
+    </div>
     </div>
   );
 };

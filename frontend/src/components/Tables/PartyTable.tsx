@@ -12,7 +12,7 @@ const PartyTable = () => {
   useEffect(() => {
     const fetchParties = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/party/get-parties");
+        const response = await axios.get("https://e-elect-backend.vercel.app/api/party/get-parties");
         setParties(response.data);
       } catch (error) {
         console.error("Error fetching parties:", error);

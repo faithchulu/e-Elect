@@ -98,7 +98,7 @@ const VoterRegistrationForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/voter/register",
+        "https://e-elect-backend.vercel.app/api/voter/register",
         formData,
       );
 
@@ -106,7 +106,7 @@ const VoterRegistrationForm = () => {
       console.log(response.data.voter.data);
 
       console.log("Voter registered successfully!");
-      setSuccess("Voter registered successfully!");
+      setSuccess("Voter data captured successfully!\nProceeding to fingerprint registration....");
       setLoading(false);
       setTimeout(() => router.push("/fingerprint-registration"), 4000);
     } catch (err) {

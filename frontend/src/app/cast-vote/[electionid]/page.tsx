@@ -24,7 +24,7 @@ const CastVoteScreen = () => {
 
     const fetchParties = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/party/get-parties-by-election/${electionid}`);
+        const response = await axios.get(`https://e-elect-backend.vercel.app/api/party/get-parties-by-election/${electionid}`);
         console.log("API Response:", response.data);
         
         // Adjust this based on the actual response structure

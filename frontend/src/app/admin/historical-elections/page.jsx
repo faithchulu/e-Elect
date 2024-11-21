@@ -3,7 +3,7 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import HistoricalElectionCard from '@/components/Cards/HistoricalElectionCard'; 
-import BASE_URL from "@/config/index";
+import LOCAL_URL from "@/config/index";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -14,7 +14,7 @@ const HistoricalElections = () => {
     const fetchElections = async () => {
       try {
         
-        const response = await axios.get(`http://localhost:4000/api/election/closed-elections`);
+        const response = await axios.get(`https://e-elect-backend.vercel.app/api/election/closed-elections`);
         setElections(response.data);  // Set fetched elections to state
       } catch (error) {
         console.error("Error fetching elections:", error);

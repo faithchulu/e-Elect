@@ -11,7 +11,7 @@ const VoterTable = () => {
   useEffect(() => {
     const fetchVoters = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/voter/get-voters");
+        const response = await axios.get("https://e-elect-backend.vercel.app/api/voter/get-voters");
         setVoters(response.data);
       } catch (error) {
         console.error("Error fetching voters:", error);
@@ -24,7 +24,7 @@ const VoterTable = () => {
   // Delete voter by ID
   const deleteVoter = async (voterId: string) => {
     try {
-      await axios.delete(`http://localhost:4000/api/voter/delete-voter/${voterId}`);
+      await axios.delete(`https://e-elect-backend.vercel.app/api/voter/delete-voter/${voterId}`);
       setVoters(voters.filter(voter => voter.id !== voterId)); // Update state to remove the deleted voter
     } catch (error) {
       console.error("Error deleting voter:", error);

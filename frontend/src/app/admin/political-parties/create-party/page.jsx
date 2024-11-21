@@ -37,7 +37,7 @@ const CreateParty = () => {
     console.log(partyData)
 
     try {
-      await axios.post('http://localhost:4000/api/party/create', partyData); // Adjust the endpoint as necessary
+      await axios.post('https://e-elect-backend.vercel.app/api/party/create', partyData); // Adjust the endpoint as necessary
       alert('Party created successfully!');
       window.location.href = "/admin/political-parties"
     } catch (error) {

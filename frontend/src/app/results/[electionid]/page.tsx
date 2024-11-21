@@ -24,8 +24,8 @@ const ElectionResultsPage = () => {
   useEffect(() => {
     const fetchElectionData = async () => {
       try {
-        const electionResponse = await axios.get(`http://localhost:4000/api/election/get-election/${electionid}`);
-        const resultsResponse = await axios.get(`http://localhost:4000/api/election/view-results/${electionid}`);
+        const electionResponse = await axios.get(`https://e-elect-backend.vercel.app/api/election/get-election/${electionid}`);
+        const resultsResponse = await axios.get(`https://e-elect-backend.vercel.app/api/election/view-results/${electionid}`);
         
         setElection(electionResponse.data);
         setResults(resultsResponse.data.results);
@@ -40,7 +40,7 @@ const ElectionResultsPage = () => {
       try {
         const partyDetails = await Promise.all(
           partyIds.map(async (partyId) => {
-            const res = await axios.get(`http://localhost:4000/api/party/get-party/${partyId}`);
+            const res = await axios.get(`https://e-elect-backend.vercel.app/api/party/get-party/${partyId}`);
             return res.data;
           })
         );
