@@ -12,8 +12,8 @@ const {
   getVoterPassKeyById,
 } = require("../services/scanService");
 
-const CLIENT_URL = "https://e-elect.vercel.app";
-const RP_ID = "e-elect.vercel.app";
+const CLIENT_URL = "http://localhost:3000";
+const RP_ID = "localhost";
 
 const initRegister = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
