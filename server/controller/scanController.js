@@ -64,7 +64,7 @@ const verifyRegister = async (req, res) => {
     const verification = await verifyRegistrationResponse({
       response: req.body,
       expectedChallenge: regInfo.challenge,
-      expectedOrigin: CLIENT_URL,
+      expectedOrigin: "https://e-elect.vercel.app",
       expectedRPID: RP_ID,
     });
 
@@ -218,7 +218,7 @@ const verifyAuth = async (req, res) => {
     const verification = await verifyAuthenticationResponse({
       response: authInfo.auth,
       expectedChallenge: parsedAuthInfo.challenge,
-      expectedOrigin: CLIENT_URL,
+      expectedOrigin: "https://e-elect.vercel.app",
       expectedRPID: RP_ID,
       authenticator: {
         credentialID: voter.credentialID,
