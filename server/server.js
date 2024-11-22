@@ -12,16 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(
-  cors({
-    origin:  ['http://localhost:3000', 'https://e-elect.vercel.app/'],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    credentials: true,
-  })
+  cors()
 );
 
 const scanRoutes = require("./routes/scanRoutes");
