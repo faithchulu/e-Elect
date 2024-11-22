@@ -7,10 +7,13 @@ const registerAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     // Check if admin already exists
-    const querySnapshot = await adminCollection
-      .where("email", "==", email)
-      .get();
+    const querySnapshot = await adminCollection.where("email", "==", email).get();
     if (!querySnapshot.empty) {
       return res.status(400).json({ message: "Admin already exists" });
     }
@@ -28,6 +31,7 @@ const registerAdmin = async (req, res) => {
       .json({ message: "Error registering admin", error: error.message });
   }
 };
+
 
 const loginAdmin = async (req, res) => {
   try {
