@@ -10,8 +10,8 @@ const {
   updateVoterCounter,
 } = require("../services/scanService");
 
-const CLIENT_URL = "e-elect.vercel.app";
-const RP_ID = "e-elect-fingerprint-backend.vercel.app";
+const CLIENT_URL = "https://e-elect.vercel.app";
+const RP_ID = "vercel.app";
 
 const initRegister = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
@@ -64,7 +64,7 @@ const verifyRegister = async (req, res) => {
     const verification = await verifyRegistrationResponse({
       response: req.body,
       expectedChallenge: regInfo.challenge,
-      expectedOrigin: "https://e-elect.vercel.app",
+      expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
     });
 
@@ -218,7 +218,7 @@ const verifyAuth = async (req, res) => {
     const verification = await verifyAuthenticationResponse({
       response: authInfo.auth,
       expectedChallenge: parsedAuthInfo.challenge,
-      expectedOrigin: "https://e-elect.vercel.app",
+      expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
       authenticator: {
         credentialID: voter.credentialID,
