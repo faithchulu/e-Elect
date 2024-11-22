@@ -13,9 +13,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin:  true,
+    origin:  ['http://localhost:3000', 'https://e-elect.vercel.app/'],
     allowedHeaders: [
-      "Access-Control-Allow-Origin",
       "Content-Type",
       "Authorization",
     ],
