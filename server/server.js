@@ -1,10 +1,9 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const { db } = require("./firebaseAdmin");
 const cookieParser = require("cookie-parser");
-const allowedOrigins = ["http://localhost:3000", "https://e-elect.vercel.app"];
+
+const app = express();
 
 // Middleware
 app.use(express.json());
@@ -12,32 +11,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-}) 
-
+// CORS Configuration
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://e-elect.vercel.app",
+];
 
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Allow origin
+        callback(null, origin); // Allow the request origin
       } else {
-        callback(new Error("Not allowed by CORS")); // Reject origin
+        callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // If credentials are required
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Allow cookies or credentials
   })
 );
 
-
+// Routes
 const scanRoutes = require("./routes/scanRoutes");
 
 app.get("/", (req, res) => {
-  res.send("<h2>E-elect backend server 2 up and running!</h2>");
+  res.send("<h2>E-elect backend server up and running!</h2>");
 });
-
-// Use routes
 
 app.use("/api/scan", scanRoutes);
 
