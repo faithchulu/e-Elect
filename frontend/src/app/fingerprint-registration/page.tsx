@@ -41,7 +41,7 @@ const AuthPage = () => {
     setLoading(true);
     try {
       const initResponse = await fetch(
-        `http://localhost:5000/api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
+        `https://e-elect-fingerprint-backend.vercel.app//api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
         {
           credentials: "include",
         },
@@ -94,7 +94,7 @@ const AuthPage = () => {
 
       // 3. Save passkey in DB
       const verifyResponse = await fetch(
-        `http://localhost:5000/api/scan/verify-register`,
+        `https://e-elect-fingerprint-backend.vercel.app//api/scan/verify-register`,
         {
           method: "POST",
           credentials: "include",

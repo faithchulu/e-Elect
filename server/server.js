@@ -11,6 +11,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*")
+}) 
+
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://e-elect.vercel.app/"],
@@ -24,6 +28,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 const scanRoutes = require("./routes/scanRoutes");
 
