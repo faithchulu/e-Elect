@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { db } = require("./firebaseAdmin");
 const cookieParser = require("cookie-parser");
+const allowedOrigins = ["http://localhost:3000", "https://e-elect.vercel.app"];
 
 // Middleware
 app.use(express.json());
@@ -15,17 +16,17 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
 }) 
 
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://e-elect.vercel.app/"],
-    allowedHeaders: [
-      "Access-Control-Allow-Origin",
-      "Content-Type",
-      "Authorization",
-    ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    credentials: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow origin
+      } else {
+        callback(new Error("Not allowed by CORS")); // Reject origin
+      }
+    },
+    credentials: true, // If credentials are required
   })
 );
 
