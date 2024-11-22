@@ -21,7 +21,7 @@ app.use(
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
-    credentials: false,
+    credentials: true,
   })
 );
 
