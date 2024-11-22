@@ -9,7 +9,8 @@ import VoteBG from "../../../public/images/backgrounds/vote-bg.jpg"
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 import Image from "next/image";
 
-const SERVER_URL = "http://localhost:5000";
+// const SERVER_URL = "https://e-elect-fingerprint-backend.vercel.app";
+// const SERVER_URL = "http://localhost:5000";
 
 const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
@@ -40,7 +41,7 @@ const AuthPage = () => {
     setLoading(true);
     try {
       const initResponse = await fetch(
-        `${SERVER_URL}/api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
+        `https://e-elect-fingerprint-backend.vercel.app/api/scan/init-register?nrcNumber=${user?.nrcNumber}&userId=${user?.id}`,
         {
           credentials: "include",
         },
@@ -93,7 +94,7 @@ const AuthPage = () => {
 
       // 3. Save passkey in DB
       const verifyResponse = await fetch(
-        `${SERVER_URL}/api/scan/verify-register`,
+        `https://e-elect-fingerprint-backend.vercel.app/api/scan/verify-register`,
         {
           method: "POST",
           credentials: "include",

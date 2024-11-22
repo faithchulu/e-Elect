@@ -3,7 +3,6 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ElectionCard from '@/components/Cards/ElectionCard'; // Adjust the import path as necessary
-import SERVER_URL from "@/config/index";
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
