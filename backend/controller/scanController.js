@@ -12,9 +12,9 @@ const {
   getVoterPassKeyById,
 } = require("../services/scanService");
 
-const CLIENT_URL = "https://e-elect.vercel.app";
+const CLIENT_URL = "e-elect.vercel.app";
 const RP_ID =
-  "https://e-elect-fingerprint-backend.vercel.app/";
+  "e-elect-fingerprint-backend.vercel.app";
 
 const initRegister = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
