@@ -12,7 +12,7 @@ const {
 
 const CLIENT_URL = "https://e-elect.vercel.app";
 const RP_ID =
-  "https://e-elect-fingerprint-backend-2m6yixb6l-faith-chulus-projects.vercel.app/";
+  "https://e-elect-fingerprint-backend.vercel.app/";
 
 const initRegister = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
