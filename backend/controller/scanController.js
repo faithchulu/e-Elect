@@ -51,6 +51,7 @@ const initRegister = async (req, res) => {
 };
 
 const verifyRegister = async (req, res) => {
+  console.log("this is cookies data",req.cookies.regInfo)
   const regInfo = JSON.parse(req.cookies.regInfo);
   console.log(req.body);
 
