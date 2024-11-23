@@ -120,7 +120,7 @@ const verifyRegister = async (req, res) => {
 const initAuth = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
   if (!nrcNumber) {
-    return res.status(400).json({ error: "Email is required" });
+    return res.status(400).json({ error: "Nrc is required" });
   }
 
   try {

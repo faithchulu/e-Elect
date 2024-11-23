@@ -32,11 +32,12 @@ async function createPassKey(passKey) {
 }
 
 async function getVoterByEmail(nrcNumber) {
+  console.log(`nrc: ${nrcNumber}`);
   const snapshot = await db
     .collection("passKeys")
     .where("nrcNumber", "==", nrcNumber)
     .get();
-  console.log(snapshot);
+  // console.log(snapshot);
 
   if (snapshot.empty) {
     return null;

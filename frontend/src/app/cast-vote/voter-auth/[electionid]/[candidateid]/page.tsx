@@ -69,9 +69,10 @@ const VoterAuthForm = () => {
   const requestFingerprintScan = async () => {
     setLoading(true);
     try {
+      console.log(`Frontend nrc: ${nrcNumber}`)
       // Step 1: Initialize fingerprint authentication and retrieve options
       const response = await axios.get(
-        `http://localhost:4000/api/scan/init-auth?nrcNumber=${user?.nrcNumber}`,
+        `http://localhost:4000/api/scan/init-auth?nrcNumber=${nrcNumber}`,
       );
 
       console.log("API Response:", response.data);

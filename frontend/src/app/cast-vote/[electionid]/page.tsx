@@ -38,7 +38,7 @@ const CastVoteScreen = () => {
   }, [electionid]);
 
   const handleVoteClick = (candidateId: string) => {
-    console.log(`Vote casted for candidate with ID ${candidateId}`);
+    console.log(`Selected candidate with ID ${candidateId}`);
   };
 
   return (

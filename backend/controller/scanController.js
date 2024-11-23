@@ -8,12 +8,12 @@ const {
   getVoterByEmail,
   createVoter,
   updateVoterCounter,
-  getVoterById,
-  getVoterPassKeyById,
 } = require("../services/scanService");
 
 const CLIENT_URL = "http://localhost:3000";
 const RP_ID = "localhost";
+// const CLIENT_URL = "https://e-elect.vercel.app";
+// const RP_ID = "https://e-elect-fingerprint-backend-2m6yixb6l-faith-chulus-projects.vercel.app/";
 
 const initRegister = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
@@ -51,7 +51,6 @@ const initRegister = async (req, res) => {
 };
 
 const verifyRegister = async (req, res) => {
-  console.log("this is cookies data",req.cookies.regInfo)
   const regInfo = JSON.parse(req.cookies.regInfo);
   console.log(req.body);
 
