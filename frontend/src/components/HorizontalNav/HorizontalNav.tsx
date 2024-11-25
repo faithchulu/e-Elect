@@ -13,7 +13,6 @@ const HorizontalNav = () => {
 
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Results', href: '/results/8MagGuFLolpQMJnnxHxe' },
   ];
 
   return (

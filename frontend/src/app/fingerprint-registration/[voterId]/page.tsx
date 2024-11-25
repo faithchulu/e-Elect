@@ -17,6 +17,7 @@ const AuthPage = () => {
   const [voterData, setVoterData] = useState<Voter | null>(null); // Store voter data with type
   const router = useRouter();
   const params = useParams();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const voterId = Array.isArray(params?.voterId) ? params.voterId[0] : params?.voterId;
@@ -57,6 +58,7 @@ const AuthPage = () => {
   };
 
   const handleRegistration = async () => {
+    setLoading(true);
     try {
       const initResponse = await fetch(
         `${SERVER_URL}/api/scan/init-register?nrcNumber=${voterData?.nrcNumber}&userId=${voterData?.id}`,
@@ -136,6 +138,8 @@ const AuthPage = () => {
     } catch (error: any) {
       console.error("Registration error:", error);
       showModal(`Error during registration: ${error.message}`);
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -153,9 +157,10 @@ const AuthPage = () => {
         />
         <button
           onClick={handleRegistration}
-          className="w-full rounded bg-blue-500 py-2 text-xl text-white transition duration-200 hover:bg-blue-600"
+          className="w-full rounded bg-green-500 disabled:bg-slate-300 py-2 text-xl text-white transition duration-200 hover:bg-green-600"
+          disabled={loading}
         >
-          Add
+          {loading ? "Processing..." : "Add Fingerprint"}
         </button>
       </div>
 

@@ -130,7 +130,7 @@ const ElectionResultsPage = () => {
       <HorizontalNav/>
       <div className="px-4 py-28">
         <div className='flex justify-between'>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">{election.electionName} Results</h1>
+          <h1 className="text-3xl font-bold text-blue-900 mb-4">{election.electionName} Results</h1>
          
         </div>
         
@@ -142,7 +142,7 @@ const ElectionResultsPage = () => {
 
               return (
                 <div key={index} className="mb-4">
-                  <h2 className="text-lg font-semibold">{party?.candidate} ({party?.partyName})</h2>
+                  <h2 className="text-lg font-semibold text-black">{party?.candidate} ({party?.partyName})</h2>
                   <div className="relative bg-gray-200 rounded-full h-8 mt-2">
                     <div
                       className="absolute top-0 left-0 bg-green-500 rounded-full h-4"
@@ -158,7 +158,7 @@ const ElectionResultsPage = () => {
             <div className="mt-4">
               <hr className="border-gray-700 mb-4" />
               <p className="text-lg font-semibold">Total Votes Cast:</p>
-              <p className="text-xl blink-animation text-blue-900">{totalVotes.toLocaleString()}</p>
+              <p className="text-xl blink-animation text-black">{totalVotes.toLocaleString()}</p>
             </div>
 
             

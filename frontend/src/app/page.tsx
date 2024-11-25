@@ -21,7 +21,7 @@ const ElectionCard = ({ election }: { election: Election }) => {
       case "registration":
         return <ClockIcon className="h-6 w-6 text-orange-500" />;
       case "voting":
-        return <CheckCircleIcon className="h-6 w-6 text-green-500" />;
+        return <Link href={`/results/${election.id}`}> <CheckCircleIcon className="h-6 w-6 text-green-500" /></Link>;
       case "closed":
         return <ExclamationCircleIcon className="text-red-500 h-6 w-6" />;
       default:
