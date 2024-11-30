@@ -4,13 +4,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { db } = require("./firebaseAdmin");
 const cookieParser = require("cookie-parser");
-const https = require("https");
-const fs = require("fs");
-
-// Read SSL certificates
-const privateKey = fs.readFileSync("C:/Users/User/key.pem", "utf8");
-const certificate = fs.readFileSync("C:/Users/User/cert.pem", "utf8");
-const credentials = { key: privateKey, cert: certificate };
 
 // Middleware
 app.use(express.json());
@@ -20,8 +13,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    // origin: ["http://localhost:3000", "https://e-elect.vercel.app"],
-    origin: "*",
+    origin: ["http://localhost:3000", "https://e-elect.vercel.app"],
     allowedHeaders: [
       "Access-Control-Allow-Origin",
       "Content-Type",
@@ -45,6 +37,6 @@ app.use("/api/scan", scanRoutes);
 
 const PORT = 5000;
 
-https.createServer(credentials, app).listen(PORT, () => {
-  console.log(`E-Voting Backend Server running on https://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`E-Voting Backend Server running on http://localhost:${PORT}`);
 });
