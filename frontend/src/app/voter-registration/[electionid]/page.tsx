@@ -110,7 +110,7 @@ const VoterRegistrationForm = () => {
         "Voter data captured successfully!\nProceeding to fingerprint registration....",
       );
       setLoading(false);
-      setTimeout(() => router.push("/fingerprint-registration"), 4000);
+      // setTimeout(() => router.push("/fingerprint-registration"), 4000);
     } catch (err) {
       console.error(err);
       setError("Registration failed. Please try again.");
