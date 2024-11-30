@@ -12,6 +12,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { userState } from "@/app/atoms/atoms";
+import { API1 } from "@/app/api";
 
 // Define the province type
 type Province =
@@ -97,16 +98,17 @@ const VoterRegistrationForm = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://e-elect-backend.vercel.app/api/voter/register",
-        formData,
-      );
+      const response = await axios.post(`${API1}/api/voter/register`, formData);
+
+      console.log("this is user", response);
 
       setUserDetails(response.data.voter.data);
       console.log(response.data.voter.data);
 
       console.log("Voter registered successfully!");
-      setSuccess("Voter data captured successfully!\nProceeding to fingerprint registration....");
+      setSuccess(
+        "Voter data captured successfully!\nProceeding to fingerprint registration....",
+      );
       setLoading(false);
       setTimeout(() => router.push("/fingerprint-registration"), 4000);
     } catch (err) {
