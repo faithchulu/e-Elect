@@ -98,7 +98,7 @@ const VoterRegistrationForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/voter/register",
+        "https://e-elect-backend.vercel.app/api/voter/register",
         formData,
       );
 

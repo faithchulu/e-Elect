@@ -35,7 +35,7 @@ const VoterAuthForm = () => {
     const fetchPartyData = async () => {
       try {
         const response = await axios.get(
-          `${SERVER_URL}/api/party/get-party/${candidateid}`,
+          `https://e-elect-backend.vercel.app//api/party/get-party/${candidateid}`,
         );
         const partyData = response.data;
         setCandidateName(partyData.candidate);

@@ -7,7 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 
 const SERVER_URL = "http://localhost:5000";
-const VOTER_API_URL = "http://localhost:4000/api/voter";
+const VOTER_API_URL = "https://e-elect-backend.vercel.app/api/voter";
 
 const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");
