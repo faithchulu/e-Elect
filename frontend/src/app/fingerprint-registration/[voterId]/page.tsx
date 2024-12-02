@@ -6,7 +6,7 @@ import type { Voter } from "@/types/voter";
 import { useRouter, useParams } from "next/navigation";
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "https://e-elect-fingerprint-backend.vercel.app";
 const VOTER_API_URL = "https://e-elect-backend.vercel.app/api/voter";
 
 const AuthPage = () => {
