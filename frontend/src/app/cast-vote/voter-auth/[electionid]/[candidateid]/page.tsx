@@ -12,9 +12,8 @@ import {
   startAuthentication,
   startRegistration,
 } from "@simplewebauthn/browser";
-import { API1 } from "@/app/api";
 
-// const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "http://localhost:4000";
 
 const VoterAuthForm = () => {
   const [step, setStep] = useState(1);
@@ -36,7 +35,7 @@ const VoterAuthForm = () => {
     const fetchPartyData = async () => {
       try {
         const response = await axios.get(
-          `${API1}/api/party/get-party/${candidateid}`,
+          `${SERVER_URL}/api/party/get-party/${candidateid}`,
         );
         const partyData = response.data;
         setCandidateName(partyData.candidate);
@@ -73,7 +72,7 @@ const VoterAuthForm = () => {
       console.log(`Frontend nrc: ${nrcNumber}`);
       // Step 1: Initialize fingerprint authentication and retrieve options
       const response = await axios.get(
-        `${API1}/api/scan/init-auth?nrcNumber=${nrcNumber}`,
+        `${SERVER_URL}/api/scan/init-auth?nrcNumber=${nrcNumber}`,
       );
 
       console.log("API Response:", response.data);
@@ -119,7 +118,7 @@ const VoterAuthForm = () => {
       console.log("this is cred man", credentialId);
 
       // Step 3: Send the authentication response back to the server for verification
-      const verifyResponse = await fetch(`${API1}/api/scan/verify-auth`, {
+      const verifyResponse = await fetch(`${SERVER_URL}/api/scan/verify-auth`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -173,7 +172,7 @@ const VoterAuthForm = () => {
   const handleConfirm = async (confirm: unknown) => {
     if (confirm) {
       try {
-        await axios.post(`${API1}/api/vote/cast-vote`, {
+        await axios.post(`${SERVER_URL}/api/vote/cast-vote`, {
           electionId: electionid,
           partyId: candidateid,
           nrcNumber,
