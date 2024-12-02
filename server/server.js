@@ -19,7 +19,7 @@ app.use(
       "Content-Type",
       "Authorization",
     ],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     preflightContinue: false,
     credentials: true,
   })
