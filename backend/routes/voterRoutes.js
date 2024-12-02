@@ -95,5 +95,26 @@ router.get("/get-voter/:nrcNumber", async (req, res) => {
   }
 });
 
+// GET route for fetching a voter by ID
+router.get("/get-voter-by-id/:id", async (req, res) => {
+  const voterId = req.params.id;
+
+  try {
+    const result = await voterService.getVoterById(voterId);
+
+    if (result.success) {
+      res.status(200).json(result.data);
+    } else {
+      res.status(404).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error("Error fetching voter by ID:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch voter by ID", error: error.message });
+  }
+});
+
+
 
 module.exports = router;

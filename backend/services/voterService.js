@@ -147,10 +147,28 @@ const getVoterByNRC = async (nrcNumber) => {
   }
 };
 
+// Function to get voter by ID
+const getVoterById = async (voterId) => {
+  try {
+    const voterRef = votersCollection.doc(voterId);
+    const doc = await voterRef.get();
+
+    if (!doc.exists) {
+      return { success: false, message: "Voter not found" };
+    }
+
+    return { success: true, data: { id: doc.id, ...doc.data() } };
+  } catch (error) {
+    console.error("Error fetching voter by ID:", error);
+    return { success: false, message: error.message };
+  }
+};
+
 
 module.exports = {
   registerVoter,
   getAllVoters,
   deleteVoterById,
   getVoterByNRC,
+  getVoterById,
 };
