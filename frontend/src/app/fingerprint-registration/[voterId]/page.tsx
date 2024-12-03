@@ -60,7 +60,7 @@ const AuthPage = () => {
       const initResponse = await fetch(
         `${SERVER_URL}/api/scan/init-register`,
         {
-          method: "GET",
+          method: "POST",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
