@@ -158,7 +158,7 @@ const initAuth = async (req, res) => {
     res.cookie("authInfo", authInfo, {
       httpOnly: true,
       maxAge: 100000,
-      secure: false, // Set to true in production
+      secure: true, // Set to true in production
       sameSite: "None", // Or adjust as necessary for your case
     });
     const payload = {
