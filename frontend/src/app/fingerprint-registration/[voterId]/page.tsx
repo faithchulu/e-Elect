@@ -58,7 +58,7 @@ const AuthPage = () => {
     try {
       // Send NRC number and userId as part of the registration request
       const initResponse = await fetch(
-        `${SERVER_URL}/api/scan/init-register/nrcNumber=${voterData?.nrcNumber}&userId=${voterData?.id}`,
+        `${SERVER_URL}/api/scan/init-register?nrcNumber=${voterData?.nrcNumber}&userId=${voterData?.id}`,
         {
           method: "POST",
           credentials: "include",
