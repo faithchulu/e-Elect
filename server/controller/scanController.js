@@ -42,7 +42,13 @@ const initRegister = async (req, res) => {
         nrcNumber,
         challenge: options.challenge,
       }),
-      { httpOnly: true, maxAge: 3600000, secure: true }
+      { 
+        httpOnly: true,
+        maxAge: 3600000,
+        secure: true,
+        domain: ".e-elect.vercel.app", 
+        path: "/",
+      }
     );
 
     res.json(options);
