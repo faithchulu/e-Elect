@@ -11,6 +11,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: "Server error", details: err.message });
+});
+
 app.use(
   cors({
     origin: "https://e-elect.vercel.app",
