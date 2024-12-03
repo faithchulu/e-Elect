@@ -115,7 +115,7 @@ const AuthPage = () => {
         `${SERVER_URL}/api/scan/verify-register`,
         {
           method: "POST",
-          credentials: "include",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
