@@ -35,63 +35,38 @@ const initRegister = async (req, res) => {
       nrcNumber: nrcNumber,
     });
 
-    res.cookie(
-      "regInfo",
-      JSON.stringify({
-        userId: options.user.id,
-        nrcNumber,
-        challenge: options.challenge,
-      }),
-      { 
-        httpOnly: true,
-        maxAge: 3600000,
-        secure: true,
-        domain: ".e-elect.vercel.app", 
-        path: "/",
-      }
-    );
+    // Send the registration options and required data in the response body
+    const regData = {
+      userId: options.user.id,
+      nrcNumber,
+      challenge: options.challenge,
+    };
 
-    res.json(options);
+    res.json({ options, regData });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Server error" });
   }
 };
 
+
 const verifyRegister = async (req, res) => {
-  try{
-  // console.log("Recieved quest:", req);
-  console.log("Reg Info", res.locals.cookie.regInfo);
-  const regInfo = JSON.parse(req.cookies.regInfo);
-  console.log(req.body);
+  const { regData, userId, nrcNumber } = req.body;
 
-  if (!regInfo) {
-    return res.status(400).json({ error: "Registration info not found" });
+  if (!regData || !userId || !nrcNumber) {
+    return res.status(400).json({ error: "Missing registration data" });
   }
-
-  console.log("this is request body", req.body);
-
-  console.log("this is user data", req.body.userId);
 
   try {
     const verification = await verifyRegistrationResponse({
       response: req.body,
-      expectedChallenge: regInfo.challenge,
+      expectedChallenge: regData.challenge,
       expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
     });
 
     if (verification.verified) {
-      // Log each field to check for undefined values
       const registrationInfo = verification.registrationInfo;
-
-      console.log("this is verification data", registrationInfo);
-
-      console.log("this is credential type", registrationInfo.credentialType);
-      console.log("this is credentialId", registrationInfo.credential.id);
-      console.log("this is counter", registrationInfo.credential.counter);
-
-      console.log("this is user id", req.body.userId);
 
       const fieldsToLog = {
         id: registrationInfo?.credential.id,
@@ -101,8 +76,8 @@ const verifyRegister = async (req, res) => {
         backedUp: registrationInfo?.credentialBackedUp,
         transport: registrationInfo.credential.transports,
         credentialID: registrationInfo?.credential.id,
-        userId: req.body.userId,
-        nrcNumber: req.body.nrcNumber,
+        userId: userId,
+        nrcNumber: nrcNumber,
       };
 
       Object.entries(fieldsToLog).forEach(([key, value]) => {
@@ -113,25 +88,17 @@ const verifyRegister = async (req, res) => {
         }
       });
 
-      await createVoter(regInfo.nrcNumber, regInfo.userId, fieldsToLog);
-
-      res.clearCookie("regInfo");
+      await createVoter(nrcNumber, userId, fieldsToLog);
       return res.json({ verified: verification.verified });
     } else {
-      return res
-        .status(400)
-        .json({ verified: false, error: "Verification failed" });
+      return res.status(400).json({ verified: false, error: "Verification failed" });
     }
   } catch (error) {
     console.error("Error during /verify-register:", error);
-    return res
-      .status(500)
-      .json({ error: "Server error", details: error.message });
-  }
-  } catch(error){
-    console.error(error);
+    return res.status(500).json({ error: "Server error", details: error.message });
   }
 };
+
 
 const initAuth = async (req, res) => {
   const nrcNumber = req.query.nrcNumber;
