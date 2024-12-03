@@ -60,7 +60,7 @@ const initRegister = async (req, res) => {
 
 const verifyRegister = async (req, res) => {
   try{
-  console.log("Recieved cookies cookie:", req.cookies);
+  console.log("Recieved quest:", req);
   const regInfo = JSON.parse(req.cookies.regInfo);
   console.log(req.body);
 
