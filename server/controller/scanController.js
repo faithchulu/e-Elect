@@ -42,7 +42,7 @@ const initRegister = async (req, res) => {
         nrcNumber,
         challenge: options.challenge,
       }),
-      { httpOnly: true, maxAge: 60000, secure: true }
+      { httpOnly: true, maxAge: 3600000, secure: true }
     );
 
     res.json(options);
