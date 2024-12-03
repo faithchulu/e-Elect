@@ -25,25 +25,27 @@ const AuthPage = () => {
       fetchVoterData(voterId);
     }
   }, [params]);
+  
 
-  // Fetch voter data using voter ID
-  const fetchVoterData = async (id: string) => {
-    try {
-      const response = await fetch(`${VOTER_API_URL}/get-voter-by-id/${id}`);
-      if (response.ok) {
-        const data: Voter = await response.json();
-        setVoterData(data);
-        setNrcNumber(data.nrcNumber); // Set NRC number from fetched data
-      } else {
-        const errorText = await response.text(); // Read non-JSON response as text
-        console.error("Server Error:", errorText);
-        showModal("Failed to fetch voter data. Please check the server.");
+    // Fetch voter data using voter ID
+    const fetchVoterData = async (id: string) => {
+      try {
+        const response = await fetch(`${VOTER_API_URL}/get-voter-by-id/${id}`);
+        if (response.ok) {
+          const data: Voter = await response.json();
+          setVoterData(data);
+          setNrcNumber(data.nrcNumber); // Set NRC number from fetched data
+        } else {
+          const errorText = await response.text(); // Read non-JSON response as text
+          console.error("Server Error:", errorText);
+          showModal("Failed to fetch voter data. Please check the server.");
+        }
+      } catch (error: any) {
+        console.error("Error fetching voter data:", error);
+        showModal(`Error fetching voter data: ${error.message}`);
       }
-    } catch (error: any) {
-      console.error("Error fetching voter data:", error);
-      showModal(`Error fetching voter data: ${error.message}`);
-    }
-  };
+    };
+    
 
   const showModal = (text: string) => {
     setModalText(text);
@@ -56,21 +58,14 @@ const AuthPage = () => {
 
   const handleRegistration = async () => {
     try {
-      // Send NRC number and userId as part of the registration request
       const initResponse = await fetch(
         `${SERVER_URL}/api/scan/init-register?nrcNumber=${voterData?.nrcNumber}&userId=${voterData?.id}`,
         {
-          method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nrcNumber: voterData?.nrcNumber,
-            userId: voterData?.id,
-          }),
-        }
+        },
       );
+
+      console.log(initResponse);
 
       if (!initResponse.ok) {
         const error = await initResponse.json();
@@ -78,7 +73,8 @@ const AuthPage = () => {
         return;
       }
 
-      const optionsJSON: PublicKeyCredentialCreationOptionsJSON = await initResponse.json();
+      const optionsJSON: PublicKeyCredentialCreationOptionsJSON =
+        await initResponse.json();
 
       // Log the options to see what we're getting from the server
       console.log("Registration options from server:", optionsJSON);
@@ -101,11 +97,18 @@ const AuthPage = () => {
         };
       }
 
+      console.log("this is user", voterData);
+
       // 2. Create passkey - pass options in correct format
+      // const registrationResponse = await startRegistration(optionsJSON);
+
       const registrationResponse = await startRegistration({ optionsJSON });
 
       // Log the registration response
       console.log("Registration response:", registrationResponse);
+
+      const userId = voterData?.id;
+      const nrcNumber = voterData?.nrcNumber;
 
       // 3. Save passkey in DB
       const verifyResponse = await fetch(
@@ -116,11 +119,7 @@ const AuthPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...registrationResponse,
-            userId: voterData?.id,
-            nrcNumber: voterData?.nrcNumber,
-          }),
+          body: JSON.stringify({ ...registrationResponse, userId, nrcNumber }),
         },
       );
 
@@ -131,7 +130,7 @@ const AuthPage = () => {
       }
 
       if (verifyData.verified) {
-        showModal(`Fingerprint Successfully registered for NRC number: ${voterData?.nrcNumber}`);
+        showModal(`Fingerprint Successfully registered for NRC number: ${nrcNumber}`);
         setTimeout(() => router.push("/"), 4000);
       } else {
         showModal("Failed to register");
@@ -144,7 +143,7 @@ const AuthPage = () => {
 
   return (
     <div className="bg-gray-100 flex h-screen items-center justify-center">
-      <HorizontalNav />
+      <HorizontalNav/>
       <div className="w-80 rounded-lg bg-white p-6 text-center shadow-md">
         <h2 className="mb-4 text-2xl font-semibold">NRC Number</h2>
         <input
