@@ -53,6 +53,7 @@ const initRegister = async (req, res) => {
 };
 
 const verifyRegister = async (req, res) => {
+  try{
   const regInfo = JSON.parse(req.cookies.regInfo);
   console.log(req.body);
 
@@ -118,6 +119,9 @@ const verifyRegister = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Server error", details: error.message });
+  }
+  } catch(error){
+    console.error(error);
   }
 };
 
