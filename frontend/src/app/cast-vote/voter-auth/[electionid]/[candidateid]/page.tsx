@@ -13,7 +13,7 @@ import {
   startRegistration,
 } from "@simplewebauthn/browser";
 
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "https://e-elect-backend.vercel.app";
 
 const VoterAuthForm = () => {
   const [step, setStep] = useState(1);
@@ -35,7 +35,7 @@ const VoterAuthForm = () => {
     const fetchPartyData = async () => {
       try {
         const response = await axios.get(
-          `https://e-elect-backend.vercel.app//api/party/get-party/${candidateid}`,
+          `https://e-elect-backend.vercel.app/api/party/get-party/${candidateid}`,
         );
         const partyData = response.data;
         setCandidateName(partyData.candidate);

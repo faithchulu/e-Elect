@@ -58,14 +58,11 @@ const initRegister = async (req, res) => {
 
 const verifyRegister = async (req, res) => {
   try{
-    const { response, registrationResponse, nrcNumber, userId, challenge } = req.body;
+    const { registrationResponse, nrcNumber, userId, challenge } = req.body;
     
     if (!challenge || !nrcNumber || !userId) {
       return res.status(400).json({ error: "Missing required fields in request body" });
     }
-
-  console.log("this is request body", req.body);
-  console.log("this is user data", req.body.userId);
 
   try {
     const verification = await verifyRegistrationResponse({
@@ -78,14 +75,6 @@ const verifyRegister = async (req, res) => {
     if (verification.verified) {
       // Log each field to check for undefined values
       const registrationInfo = verification.registrationInfo;
-
-      console.log("this is verification data", registrationInfo);
-
-      console.log("this is credential type", registrationInfo.credentialType);
-      console.log("this is credentialId", registrationInfo.credential.id);
-      console.log("this is counter", registrationInfo.credential.counter);
-
-      console.log("this is user id", req.body.userId);
 
       const fieldsToLog = {
         id: registrationInfo?.credential.id,

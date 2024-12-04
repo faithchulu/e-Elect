@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 
-const SERVER_URL = "http://localhost:4000";
+const SERVER_URL = "https://e-elect-backend.vercel.app";
 
 const AuthPage = () => {
   const [nrcNumber, setNrcNumber] = useState("");

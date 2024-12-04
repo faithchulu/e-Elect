@@ -3,13 +3,12 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { db } = require("./firebaseAdmin");
-// const cookieParser = require("cookie-parser");
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(cookieParser());
+
 
 
 app.use(
@@ -27,21 +26,6 @@ app.use(
 );
 
 
-app.use((req, res, next) => {
-  const { headers: { cookie } } = req;
-  if (cookie) {
-      const values = cookie.split(';').reduce((res, item) => {
-          const data = item.trim().split('=');
-          return { ...res, [data[0]]: data[1] };
-      }, {});
-      res.locals.cookie = values;
-  } else {
-      res.locals.cookie = {};
-  }
-  next();
-});
-
-
 const scanRoutes = require("./routes/scanRoutes");
 
 app.get("/", (req, res) => {
@@ -49,7 +33,6 @@ app.get("/", (req, res) => {
 });
 
 // Use routes
-
 app.use("/api/scan", scanRoutes);
 
 const PORT = 5000;
