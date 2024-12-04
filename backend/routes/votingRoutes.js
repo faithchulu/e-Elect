@@ -4,7 +4,7 @@ const votingService = require("../services/votingService");
 
 router.post("/cast-vote", async (req, res) => {
   const { electionId, partyId, nrcNumber, voterAddress } = req.body;
-  const result = await votingService.castVote(electionId, partyId, nrcNumber, voterAddress);
+  const result = await votingService.castVote2(electionId, partyId, nrcNumber, voterAddress);
   res.status(result.success ? 200 : 400).json(result);
 });
 
