@@ -25,9 +25,7 @@ const initRegister = async (req, res) => {
 
   try {
     const existingVoter = await getVoterByEmail(nrcNumber);
-    // if (existingVoter != null) {
-    //   return res.status(400).json({ error: "Voter already exists" });
-    // }
+   
 
     const options = await generateRegistrationOptions({
       rpID: RP_ID,
@@ -60,26 +58,18 @@ const initRegister = async (req, res) => {
 
 const verifyRegister = async (req, res) => {
   try{
-
-    const { response, nrcNumber, userId, challenge } = req.body;
-  // console.log("Recieved quest:", req);
-  // console.log("Reg Info", res.locals.cookie);
-  // const regInfo = JSON.parse(req.cookies.regInfo);
-  // console.log(req.body);
-
-  // if (!regInfo) {
-  //   return res.status(400).json({ error: "Registration info not found" });
-  // }
-  if (!challenge || !nrcNumber || !userId) {
-    return res.status(400).json({ error: "Missing required fields in request body" });
-  }
+    const { response, registrationResponse, nrcNumber, userId, challenge } = req.body;
+    
+    if (!challenge || !nrcNumber || !userId) {
+      return res.status(400).json({ error: "Missing required fields in request body" });
+    }
 
   console.log("this is request body", req.body);
   console.log("this is user data", req.body.userId);
 
   try {
     const verification = await verifyRegistrationResponse({
-      response,
+      response: registrationResponse,
       expectedChallenge: challenge,
       expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
@@ -117,10 +107,8 @@ const verifyRegister = async (req, res) => {
         }
       });
 
-      // await createVoter(regInfo.nrcNumber, regInfo.userId, fieldsToLog);
       await createVoter(nrcNumber, userId, fieldsToLog);
 
-      // res.clearCookie("regInfo");
       return res.json({ verified: verification.verified });
     } else {
       return res

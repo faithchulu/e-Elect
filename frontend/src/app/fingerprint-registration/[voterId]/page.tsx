@@ -117,7 +117,7 @@ const AuthPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...registrationResponse, userId, nrcNumber, challenge: optionsJSON.challenge, }),
+          body: JSON.stringify({ registrationResponse, userId, nrcNumber, challenge: optionsJSON.challenge, }),
         },
       );
 
