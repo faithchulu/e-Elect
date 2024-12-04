@@ -61,7 +61,7 @@ const initRegister = async (req, res) => {
 const verifyRegister = async (req, res) => {
   try{
 
-    const { registrationResponse, nrcNumber, userId, challenge } = req.body;
+    const { response, nrcNumber, userId, challenge } = req.body;
   // console.log("Recieved quest:", req);
   // console.log("Reg Info", res.locals.cookie);
   // const regInfo = JSON.parse(req.cookies.regInfo);
@@ -79,7 +79,7 @@ const verifyRegister = async (req, res) => {
 
   try {
     const verification = await verifyRegistrationResponse({
-      response: registrationResponse,
+      response,
       expectedChallenge: challenge,
       expectedOrigin: CLIENT_URL,
       expectedRPID: RP_ID,
