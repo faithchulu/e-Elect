@@ -15,6 +15,7 @@
     "@passageidentity/passage-elements": "^2.0.3",
     "@passageidentity/passage-flex-js": "^0.2.2",
     "@passageidentity/passage-node": "^2.11.2",
+    "@passageidentity/passage-react": "^1.0.0",
     "@simplewebauthn/browser": "^11.0.0",
     "@simplewebauthn/typescript-types": "^8.3.4",
     "@webauthn/client": "^0.1.3",

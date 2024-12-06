@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
-import type { Voter } from "@/types/voter";  
+import type { Voter } from "@/types/voter";
 import { useRouter, useParams } from "next/navigation";
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
 
@@ -20,33 +20,33 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const voterId = Array.isArray(params?.voterId) ? params.voterId[0] : params?.voterId;
+    const voterId = Array.isArray(params?.voterId)
+      ? params.voterId[0]
+      : params?.voterId;
     if (voterId) {
       setVoterId(voterId); // `voterId` is now guaranteed to be a string
       fetchVoterData(voterId);
     }
   }, [params]);
-  
 
-    // Fetch voter data using voter ID
-    const fetchVoterData = async (id: string) => {
-      try {
-        const response = await fetch(`${VOTER_API_URL}/get-voter-by-id/${id}`);
-        if (response.ok) {
-          const data: Voter = await response.json();
-          setVoterData(data);
-          setNrcNumber(data.nrcNumber); // Set NRC number from fetched data
-        } else {
-          const errorText = await response.text(); // Read non-JSON response as text
-          console.error("Server Error:", errorText);
-          showModal("Failed to fetch voter data. Please check the server.");
-        }
-      } catch (error: any) {
-        console.error("Error fetching voter data:", error);
-        showModal(`Error fetching voter data: ${error.message}`);
+  // Fetch voter data using voter ID
+  const fetchVoterData = async (id: string) => {
+    try {
+      const response = await fetch(`${VOTER_API_URL}/get-voter-by-id/${id}`);
+      if (response.ok) {
+        const data: Voter = await response.json();
+        setVoterData(data);
+        setNrcNumber(data.nrcNumber); // Set NRC number from fetched data
+      } else {
+        const errorText = await response.text(); // Read non-JSON response as text
+        console.error("Server Error:", errorText);
+        showModal("Failed to fetch voter data. Please check the server.");
       }
-    };
-    
+    } catch (error: any) {
+      console.error("Error fetching voter data:", error);
+      showModal(`Error fetching voter data: ${error.message}`);
+    }
+  };
 
   const showModal = (text: string) => {
     setModalText(text);
@@ -115,11 +115,16 @@ const AuthPage = () => {
         `${SERVER_URL}/api/scan/verify-register`,
         {
           method: "POST",
-          credentials: 'include',
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ registrationResponse, userId, nrcNumber, challenge: optionsJSON.challenge, }),
+          body: JSON.stringify({
+            registrationResponse,
+            userId,
+            nrcNumber,
+            challenge: optionsJSON.challenge,
+          }),
         },
       );
 
@@ -130,7 +135,9 @@ const AuthPage = () => {
       }
 
       if (verifyData.verified) {
-        showModal(`Fingerprint Successfully registered for NRC number: ${nrcNumber}`);
+        showModal(
+          `Fingerprint Successfully registered for NRC number: ${nrcNumber}`,
+        );
         setTimeout(() => router.push("/"), 4000);
       } else {
         showModal("Failed to register");
@@ -138,14 +145,14 @@ const AuthPage = () => {
     } catch (error: any) {
       console.error("Registration error:", error);
       showModal(`Error during registration: ${error.message}`);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <div className="bg-gray-100 flex h-screen items-center justify-center">
-      <HorizontalNav/>
+      <HorizontalNav />
       <div className="w-80 rounded-lg bg-white p-6 text-center shadow-md">
         <h2 className="mb-4 text-2xl font-semibold">NRC Number</h2>
         <input
@@ -157,7 +164,7 @@ const AuthPage = () => {
         />
         <button
           onClick={handleRegistration}
-          className="w-full rounded bg-green-500 disabled:bg-slate-300 py-2 text-xl text-white transition duration-200 hover:bg-green-600"
+          className="w-full rounded bg-green-500 py-2 text-xl text-white transition duration-200 hover:bg-green-600 disabled:bg-slate-300"
           disabled={loading}
         >
           {loading ? "Processing..." : "Add Fingerprint"}

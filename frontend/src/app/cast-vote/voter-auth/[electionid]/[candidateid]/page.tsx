@@ -1,6 +1,6 @@
 "use client";
 import HorizontalNav from "@/components/HorizontalNav/HorizontalNav";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FingerPrintIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Sucess from "@/components/Alerts/Sucess";
@@ -50,6 +50,30 @@ const VoterAuthForm = () => {
     }
   }, [candidateid]);
 
+  // Add event listener for postMessage
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Verify the origin for security
+      if (event.origin !== "http://localhost:3000") return;
+
+      if (event.data === "authentication_success") {
+        // Close the modal
+        setModalOpen(false);
+
+        // Move to step 3
+        setStep(3);
+        setFingerprintScanned(true);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    // Cleanup the event listener
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
   // Submit NRC number and move to the next step
   const handleNrcNumberSubmit = (e: any) => {
     e.preventDefault();
@@ -77,22 +101,14 @@ const VoterAuthForm = () => {
 
       console.log("API Response:", response.data);
 
-      // Check if the response indicates a success
-
-      console.log("these are your options", response.data.options);
-
       const options = response.data;
       setOptions(options);
-
-      console.log("processing the options");
 
       const optionsJSON = response.data.options;
 
       const authJSON = await startAuthentication({ optionsJSON });
 
       console.log("this is authJson", authJSON);
-
-      console.log("this is auth options", authJSON);
       console.log("this is my goal to get the public key", options.voter);
 
       const creds = options.voter;
@@ -101,21 +117,14 @@ const VoterAuthForm = () => {
 
       // Step 2: Use the passkey to respond to the authentication challenge
       if (options.options && options.options.allowCredentials) {
-        // Assuming you want the first credential ID
         const credential = options.options.allowCredentials[0];
-
         console.log("these are allowed creds", credential);
-
         console.log("this is your counter", options.voter.counter);
-
         credentialId = credential.id;
-
         console.log("Selected Credential ID:", credentialId);
       } else {
         console.log("No allowCredentials found.");
       }
-
-      console.log("this is cred man", credentialId);
 
       // Step 3: Send the authentication response back to the server for verification
       const verifyResponse = await fetch(`${SERVER_URL}/api/scan/verify-auth`, {
@@ -145,27 +154,24 @@ const VoterAuthForm = () => {
       // Handle the verification result
       if (verifyData.verified) {
         showModal(`Successfully logged in ${nrcNumber}`);
+        setFingerprintScanned(true);
+        setStep(3);
       } else {
         showModal(`Failed to log in`);
       }
-
-      // Update UI based on scan status
-      setFingerprintScanned(true);
-      setStep(3);
-      // } else {
-      //   console.error("Fingerprint scan failed:", response.data.message);
-      // }
     } catch (error) {
       console.log("this is response", error);
       console.error("Error during fingerprint scan:", error);
+      showModal("Authentication failed");
     } finally {
       setLoading(false);
     }
   };
 
-  // Simulate fingerprint scan and move to the next step
   const handleFingerprintScan = () => {
-    requestFingerprintScan(); // Call the function to request a scan
+    setModalOpen(true);
+    // Optional: Trigger scan process
+    // requestFingerprintScan();
   };
 
   // Handle vote confirmation and send a POST request to cast the vote
@@ -254,45 +260,71 @@ const VoterAuthForm = () => {
               authentication.
             </p>
             <button
-              onClick={handleFingerprintScan}
-              className="rounded-md bg-green-500 disabled:bg-slate-300 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-              disabled={loading}
+              onClick={requestFingerprintScan}
+              className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
-              {loading ? "Processing..." : "Scan Fingerprint"}
+              Scan Fingerprint
             </button>
-            {fingerprintScanned && (
-              <p className="mt-2 text-green-600">
-                Fingerprint scanned successfully!
-              </p>
-            )}
           </div>
         )}
-        {step === 3 && (
-          <div className="flex flex-col justify-center">
-            <h1 className="mb-4 text-2xl font-semibold text-black">
-              Step 3: Confirm Your Vote
-            </h1>
-            <p className="mb-4">
-              Are you sure you want to vote for <strong>{candidateName}</strong>{" "}
-              of <strong>{politicalParty}</strong>?
+        {step === 3 && fingerprintScanned && (
+          <div className="mt-4 flex flex-col items-center">
+            <p className="text-lg text-green-600">
+              Fingerprint scanned successfully. Please confirm your vote.
             </p>
-            <div className="flex justify-between">
+            <div className="mt-4 flex justify-center space-x-4">
               <button
                 onClick={() => handleConfirm(true)}
                 className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
-                Yes, Im Sure
+                Confirm Vote
               </button>
               <button
                 onClick={() => handleConfirm(false)}
-                className="hover:bg-red-600 focus:ring-red-500 rounded-md bg-meta-1 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+                className="bg-red-500 hover:bg-red-600 focus:ring-red-500 rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
               >
-                No, Cancel
+                Cancel
               </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Passage Modal */}
+      {modalOpen && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-50">
+          <div className="flex w-[550px] flex-col rounded-lg bg-white p-4">
+            <iframe
+              src={`http://localhost:3000/passage`}
+              width="500"
+              height="500"
+              title="Passage Authentication"
+              className="border-gray-300 mb-4 border-2"
+            />
+            <div className="flex justify-between space-x-4">
+              <button
+                onClick={() => {
+                  setModalOpen(false);
+                  setStep(2);
+                }}
+                className="bg-red-500 hover:bg-red-600 flex-1 rounded px-4 py-2 text-white transition"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  setModalOpen(false);
+                  setStep(3);
+                  setFingerprintScanned(true);
+                }}
+                className="flex-1 rounded bg-green-500 px-4 py-2 text-white transition hover:bg-green-600"
+              >
+                Proceed to Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

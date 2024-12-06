@@ -102,14 +102,14 @@ const VoterRegistrationForm = () => {
         formData,
       );
 
-      const voterData = response.data.voter.data;
-      setUserDetails(voterData); // Save data to recoil state
-      console.log(voterData);
+      // const voterData = response.data.voter.data;
+      // setUserDetails(voterData); // Save data to recoil state
+      // console.log(voterData);
 
       console.log("Voter registered successfully!");
       setSuccess("Voter registered successfully!");
       setLoading(false);
-      setTimeout(() => router.push(`/fingerprint-registration/${voterData.id}`), 2000);
+      setTimeout(() => router.push(`/passage`), 2000);
     } catch (err) {
       console.error(err);
       setError("Registration failed. Please try again.");
